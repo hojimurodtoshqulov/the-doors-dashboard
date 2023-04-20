@@ -77,7 +77,7 @@ function App() {
         {/* </Route> */}
         <Route path="/login" element={<Auth />} />
 
-        <Route path="/admin" element={<Pages />}>
+        <Route path="/" element={<Pages />}>
           {/* <Route index element={<Home />} /> */}
 
           <Route path="users" element={<Users />} />

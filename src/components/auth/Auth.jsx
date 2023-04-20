@@ -3,6 +3,7 @@ import axios from "axios";
 import jwt from "jwt-decode";
 import s from "./Auth.module.css";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../shared/constants";
 
 export default function Auth() {
   const htmlElement = document.querySelector("html");
@@ -16,25 +17,28 @@ export default function Auth() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    navigate("/admin", { replace: true });
-    // axios
-    //   .post(`${process.env.REACT_APP_API_URL}user/sign-in`, data)
-    //   .then((res) => {
-    //     if (res.status == 200) {
-    //       const token = res.data.token;
-    //       const tokenData = jwt(token);
-
-    //       if (tokenData.role == "admin") {
-    //         sessionStorage.setItem("token", token);
-    //         navigate("/admin", { replace: true });
-    //       } else {
-    //         alert("Admin user not found");
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     alert("User not found");
-    //   });
+    navigate("/", { replace: true });
+    console.log(
+      baseUrl    );
+    fetch(
+      `${baseUrl}/auth/login?username=${data.username}&password=${data.password}`
+    )
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          // const token = res.data.token;
+          // const tokenData = jwt(tokeusn);
+          // if (tokenData.role == "admin") {
+          //   sessionStorage.setItem("token", token);
+          //   navigate("/admin", { replace: true });
+          // } else {
+          //   alert("Admin user not found");
+          // }
+        }
+      })
+      .catch((err) => {
+        alert("User not found");
+      });
   };
   useEffect(() => {
     const sessionToken = sessionStorage.getItem("token");

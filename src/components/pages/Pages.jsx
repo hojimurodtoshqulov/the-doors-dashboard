@@ -14,18 +14,17 @@ function Pages() {
   const navigate = useNavigate();
   useEffect(() => {
     const sessionToken = sessionStorage.getItem("token");
-    // if (sessionToken) {
-    //   const tokenData = jwt(sessionToken);
-    //   if (tokenData.role != "admin") {
-    //     navigate("/login", { replace: true });
-    //   } else {
-    //     setToken(tokenData);
-    //   }
-    // } else {
-    //   navigate("/login", { replace: true });
-    // }
-
-    navigate("/admin");
+    console.log(sessionToken);
+    if (sessionToken) {
+      const tokenData = jwt(sessionToken);
+      if (tokenData.role !== "admin") {
+        navigate("/login", { replace: true });
+      } else {
+        setToken(tokenData);
+      }
+    } else {
+      navigate("/login", { replace: true });
+    }
   }, []);
 
   return (

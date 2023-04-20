@@ -33,38 +33,23 @@ function LeftMenu() {
         </NavLink>
 
         <div className={`${s.navbar_nav} navbar-nav w-100`}>
-          <NavLink
-            to="/admin/users"
-            className={`${s.nav_link} nav-item nav-link`}
-          >
+          <NavLink to="/users" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-user me-2"></i>Users
           </NavLink>
-          <NavLink
-            to="/admin/teacher"
-            className={`${s.nav_link} nav-item nav-link`}
-          >
+          <NavLink to="/teacher" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-user me-2"></i>Teachers
           </NavLink>
-          <NavLink
-            to="/admin/menu"
-            className={`${s.nav_link} nav-item nav-link`}
-          >
+          <NavLink to="/menu" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-bars me-2"></i>Menu
           </NavLink>
-          <NavLink
-            to="/admin/news"
-            className={`${s.nav_link} nav-item nav-link`}
-          >
+          <NavLink to="/news" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-th me-2"></i>News
           </NavLink>
-          <NavLink
-            to="/admin/courses"
-            className={`${s.nav_link} nav-item nav-link`}
-          >
+          <NavLink to="/courses" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-th me-2"></i>Courses
           </NavLink>
           <NavLink
-            to="/admin/courses-category"
+            to="/courses-category"
             className={`${s.nav_link} nav-item nav-link`}
           >
             <i className="fa fa-solid fa-th me-2"></i>Category
