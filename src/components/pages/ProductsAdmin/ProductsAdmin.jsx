@@ -3,11 +3,16 @@ import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
+import { baseUrl } from "../../../shared/constants";
+import { useTranslation } from "react-i18next";
 
 function TeachersAdmin({ usersState, updateUsers }) {
   const navigation = useNavigate();
   const [data, setData] = useState([]);
   const [count, setCount] = useState(1);
+
+  const { i18n } = useTranslation();
+
   const handleDelete = (id) => {
     axios
       .delete(`${process.env.REACT_APP_API_URL}teachers/delete/${id}`)
@@ -19,9 +24,13 @@ function TeachersAdmin({ usersState, updateUsers }) {
       });
   };
 
+  const title = i18n.language === "ru" ? "titleRu" : "titleUz";
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}teachers/get`).then((res) => {
-      setData(res.data.data?.result);
+    axios.get(`${baseUrl}/products`).then((res) => {
+      console.log(res);
+
+      setData(res.data);
     });
   }, [count]);
 
@@ -54,7 +63,7 @@ function TeachersAdmin({ usersState, updateUsers }) {
                       return (
                         <tr key={index}>
                           <th scope="row">{index + 1}</th>
-                          <td>{item?.name_ru}</td>
+                          <td>{item[title]}</td>
                           <td>
                             <NavLink
                               to={`view/${item?.id}`}

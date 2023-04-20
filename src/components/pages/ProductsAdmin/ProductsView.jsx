@@ -1,22 +1,74 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Uploader from "../../layouts/uploader/Uploader";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { NotificationManager } from "react-notifications";
 import Switch from "../../layouts/switch/Switch";
+import Uploader from "../../layouts/uploader/Uploader";
+import ImageUploadPreviewComponent from "../../imageUploader";
+import { baseUrl } from "../../../shared/constants";
+import { jwtApi } from "../../../api/jwtApi";
 
-export default function TeacherView() {
+export default function ProductsCreate() {
+  const { id } = useParams();
+
   const [data, setData] = useState({
-    name_ru: "",
-    name_uz: "",
-    short_content_ru: "",
-    short_content_uz: "",
-    status: true,
+    titleRu: "",
+    titleUz: "",
+    descriptionRu: "",
+    descriptionUz: "",
+    price: 0,
+    discount: 0,
+    attachmentContentsId: [],
   });
 
-  const [password, setPassword] = useState(".");
-  const params = useParams();
-  const id = params.id;
+  const [upload, setUpload] = useState({
+    pictures: [],
+    maxFileSize: 5242880,
+    imgExtension: [".jpg", ".png"],
+    defaultImages: [],
+  });
+
+  const handleImageChange = (files) => {
+    setUpload(
+      (prevUpload) => ({
+        ...prevUpload,
+        pictures: [files],
+      }),
+      () => {
+        console.warn("It was added!");
+      }
+    );
+  };
+
+  const sumbitImages = async () => {
+    try {
+      const formData = new FormData();
+
+      const { pictures, defaultImages } = upload;
+
+      if (pictures[0].length !== 4) throw new Error("Upload 4 images");
+
+      pictures[0].forEach((base64) => {
+        formData.append(
+          "file",
+          new File([base64], `image${crypto.randomUUID()}`)
+        );
+      });
+
+      const res = await axios.post(`${baseUrl}/files`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      });
+
+      return res.data;
+    } catch (error) {
+      NotificationManager.error(error.message, "Images error");
+      console.log(error);
+    }
+  };
+
   const navigation = useNavigate();
 
   const handleChange = (event) => {
@@ -26,35 +78,31 @@ export default function TeacherView() {
     setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
   };
 
-  // const handleChangePassword = (event) => {
-  //   const inputValue = event.target.value;
+  useEffect(() => {}, []);
 
-  //   setPassword(inputValue);
-  // };
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}teachers/get/${id}`)
-      .then((res) => {
-        if (res.status == 200) {
-          setData(res.data.data);
-        }
-      });
-  }, []);
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password != "" && password != ".") {
-      data["password"] = password;
-    } else {
-      delete data["password"];
+
+    try {
+      const attachmentContentsId = await sumbitImages();
+      const dataToSubmit = {
+        titleUz: data.titleUz,
+        titleRu: data.titleRu,
+        descriptionUz: data.descriptionUz,
+        descriptionRu: data.descriptionRu,
+        price: data.price,
+        discount: data.discount,
+        attachmentContentsId,
+      };
+
+      const res = await jwtApi.post("/products", dataToSubmit);
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
     }
-    axios
-      .put(`${process.env.REACT_APP_API_URL}teachers/update/${id}`, data)
-      .then((res) => {
-        if (res.status == 200) {
-          navigation("/admin/teacher", { replace: true });
-        }
-      });
+
+    sumbitImages();
   };
 
   return (
@@ -62,53 +110,21 @@ export default function TeacherView() {
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Teacher update form</h6>
+            <h6 className="mb-4">Edit the product</h6>
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label htmlFor="exampleInputEmail9" className="form-label">
-                      Name : ru
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Title : ru
                     </label>
                     <input
                       type="text"
-                      name="name_ru"
+                      name="titleRu"
+                      value={data.titleRu}
                       onChange={handleChange}
                       className="form-control"
-                      id="exampleInputEmail9"
-                      value={data.name_ru || ""}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail65" className="form-label">
-                      Name : uz
-                    </label>
-                    <input
-                      type="text"
-                      name="name_uz"
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail65"
-                      value={data.name_uz || ""}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail2" className="form-label">
-                      Info : ru
-                    </label>
-                    <input
-                      type="text"
-                      name="short_content_ru"
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail2"
-                      value={data.short_content_ru || ""}
+                      id="exampleInputEmail1"
                       required
                     />
                   </div>
@@ -116,77 +132,91 @@ export default function TeacherView() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Info : uz
+                      Title : uz
                     </label>
                     <input
                       type="text"
-                      name="short_content_uz"
+                      name="titleUz"
+                      value={data.titleUz}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
-                      value={data.short_content_uz || ""}
                       required
                     />
                   </div>
                 </div>
-                {/* <div className="col-6">
+                <div className="col-md-6">
                   <div className="mb-3">
-                    <label
-                      htmlFor="exampleInputPassword1"
-                      className="form-label"
-                    >
-                      Password
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Description : ru
+                    </label>
+                    <textarea
+                      name="descriptionRu"
+                      // lang={item.key}
+                      value={data.descriptionRu}
+                      onChange={handleChange}
+                      className="form-control"
+                      id="short_content_ru"
+                      rows={6}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Description : uz
+                    </label>
+                    <textarea
+                      name="descriptionUz"
+                      // lang={item.key}
+                      value={data.descriptionUz}
+                      onChange={handleChange}
+                      className="form-control"
+                      id="short_content_ru"
+                      rows={6}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Price
                     </label>
                     <input
-                      type="password"
-                      value={password || ""}
-                      name="password"
-                      onChange={handleChangePassword}
+                      type="number"
+                      name="price"
+                      value={data.price}
+                      onChange={handleChange}
                       className="form-control"
-                      id="exampleInputPassword1"
+                      id="exampleInputEmail1"
                       required
                     />
                   </div>
-                </div> */}
-                {/* <div className="col-6">
-                  <select
-                    className="form-select   mb-3"
-                    name="role"
-                    value={data.role || ""}
-                    onChange={handleChange}
-                    aria-label=".form-select-sm example"
-                    required
-                  >
-                    <option value="">Please select</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div> */}
-                {/* <div className="col-6">
-                  <select
-                    className="form-select   mb-3"
-                    name="status"
-                    value={data.status || "false"}
-                    onChange={handleChange}
-                    aria-label=".form-select-sm example"
-                  >
-                    <option value="false">Inactive</option>
-                    <option value="true">Active</option>
-                  </select>
-
-                </div> */}
-                <div className="col-6">
-                  <Switch setData={setData} value={data.status} />
                 </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Discount
+                    </label>
+                    <input
+                      type="number"
+                      name="discount"
+                      value={data.discount}
+                      onChange={handleChange}
+                      className="form-control"
+                      id="exampleInputEmail1"
+                    />
+                  </div>
+                </div>
+
                 <div className="col-12 pb-3 mb-3 border-bottom">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#myModal"
-                  >
-                    Upload
-                  </button>
-                  {id ? <Uploader category="teachers" category_id={id} /> : ""}
+                  <div class="mb-3">
+                    <ImageUploadPreviewComponent
+                      {...upload}
+                      handleChange={handleImageChange}
+                    />
+                  </div>
+                  sumbitImages
                 </div>
               </div>
 
@@ -199,8 +229,9 @@ export default function TeacherView() {
               >
                 Back
               </button>
+
               <button type="submit" className="btn btn-primary">
-                Update
+                Create
               </button>
             </form>
           </div>

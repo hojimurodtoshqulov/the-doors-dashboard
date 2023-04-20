@@ -5,17 +5,67 @@ import { NotificationManager } from "react-notifications";
 import Switch from "../../layouts/switch/Switch";
 import Uploader from "../../layouts/uploader/Uploader";
 import ImageUploadPreviewComponent from "../../imageUploader";
+import { baseUrl } from "../../../shared/constants";
+import { jwtApi } from "../../../api/jwtApi";
 
 export default function ProductsCreate() {
-  const [categoryId, setCategoryId] = useState(0);
-  const [lang, setLang] = useState([]);
   const [data, setData] = useState({
-    name_ru: "",
-    name_uz: "",
-    short_content_ru: "",
-    short_content_uz: "",
-    status: false,
+    titleRu: "",
+    titleUz: "",
+    descriptionRu: "",
+    descriptionUz: "",
+    price: 0,
+    discount: 0,
+    attachmentContentsId: [],
   });
+
+  const [upload, setUpload] = useState({
+    pictures: [],
+    maxFileSize: 5242880,
+    imgExtension: [".jpg", ".png"],
+    defaultImages: [],
+  });
+
+  const handleImageChange = (files) => {
+    setUpload(
+      (prevUpload) => ({
+        ...prevUpload,
+        pictures: [files],
+      }),
+      () => {
+        console.warn("It was added!");
+      }
+    );
+  };
+
+  const sumbitImages = async () => {
+    try {
+      const formData = new FormData();
+
+      const { pictures, defaultImages } = upload;
+
+      if (pictures[0].length !== 4) throw new Error("Upload 4 images");
+
+      pictures[0].forEach((base64) => {
+        formData.append(
+          "file",
+          new File([base64], `image${crypto.randomUUID()}`)
+        );
+      });
+
+      const res = await axios.post(`${baseUrl}/files`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      });
+
+      return res.data;
+    } catch (error) {
+      NotificationManager.error(error.message, "Images error");
+      console.log(error);
+    }
+  };
 
   const navigation = useNavigate();
 
@@ -26,44 +76,31 @@ export default function ProductsCreate() {
     setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
   };
 
-  useEffect(() => {
-    // axios.get(`${process.env.REACT_APP_API_URL}lang/get`).then((res) => {
-    //   setLang(res.data.data.result);
-    // });
+  useEffect(() => {}, []);
 
-    // axios
-    //   .get(`${process.env.REACT_APP_API_URL}courses_category/get-main`)
-    //   .then((res) => {
-    //     setCoursesCategory(res.data.data.result);
-    //   });
-
-    // data.created_on = Math.floor(data.crea ted_on.getTime() / 1000);
-    axios
-      .post(`${process.env.REACT_APP_API_URL}teachers/create`, data)
-      .then((res) => {
-        if (res.status === 200) {
-          setCategoryId(res.data.id);
-        }
-      });
-    // data.created_on = new Date();
-  }, [0]);
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .put(
-        `${process.env.REACT_APP_API_URL}teachers/update/${categoryId}`,
-        data
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          // setCategoryId(res.data.id);
-          navigation("/admin/teacher", { replace: true });
-        }
-      })
-      .catch((err) => {
-        NotificationManager.error("Error create user", "Error!");
-      });
+
+    try {
+      const attachmentContentsId = await sumbitImages();
+      const dataToSubmit = {
+        titleUz: data.titleUz,
+        titleRu: data.titleRu,
+        descriptionUz: data.descriptionUz,
+        descriptionRu: data.descriptionRu,
+        price: data.price,
+        discount: data.discount,
+        attachmentContentsId,
+      };
+
+      const res = await jwtApi.post("/products", dataToSubmit);
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+
+    sumbitImages();
   };
 
   return (
@@ -77,11 +114,12 @@ export default function ProductsCreate() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Name : ru
+                      Title : ru
                     </label>
                     <input
                       type="text"
-                      name="name_ru"
+                      name="titleRu"
+                      value={data.titleRu}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
@@ -92,11 +130,12 @@ export default function ProductsCreate() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Name : uz
+                      Title : uz
                     </label>
                     <input
                       type="text"
-                      name="name_uz"
+                      name="titleUz"
+                      value={data.titleUz}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
@@ -110,9 +149,9 @@ export default function ProductsCreate() {
                       Description : ru
                     </label>
                     <textarea
-                      name="short_content_ru"
+                      name="descriptionRu"
                       // lang={item.key}
-                      // value={data["short_content_" + item.key]}
+                      value={data.descriptionRu}
                       onChange={handleChange}
                       className="form-control"
                       id="short_content_ru"
@@ -126,9 +165,9 @@ export default function ProductsCreate() {
                       Description : uz
                     </label>
                     <textarea
-                      name="short_content_ru"
+                      name="descriptionUz"
                       // lang={item.key}
-                      // value={data["short_content_" + item.key]}
+                      value={data.descriptionUz}
                       onChange={handleChange}
                       className="form-control"
                       id="short_content_ru"
@@ -143,7 +182,8 @@ export default function ProductsCreate() {
                     </label>
                     <input
                       type="number"
-                      name="name_ru"
+                      name="price"
+                      value={data.price}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
@@ -153,36 +193,28 @@ export default function ProductsCreate() {
                 </div>
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <div className="form-group">
-                      <label htmlFor="images">Select Images:</label>
-                      <input
-                        type="file"
-                        className="form-control-file"
-                        id="images"
-                        name="images"
-                        multiple
-                        // onChange={handleFileSelect}
-                      />
-                    </div>
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Discount
+                    </label>
+                    <input
+                      type="number"
+                      name="discount"
+                      value={data.discount}
+                      onChange={handleChange}
+                      className="form-control"
+                      id="exampleInputEmail1"
+                    />
                   </div>
                 </div>
+
                 <div className="col-12 pb-3 mb-3 border-bottom">
                   <div class="mb-3">
-                    <ImageUploadPreviewComponent />
+                    <ImageUploadPreviewComponent
+                      {...upload}
+                      handleChange={handleImageChange}
+                    />
                   </div>
-                  {/* <button
-                    type="button"
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#myModal"
-                  >
-                    Upload
-                  </button>
-                  {categoryId ? (
-                    <Uploader category="teachers" category_id={categoryId} />
-                  ) : (
-                    ""
-                  )} */}
+                  sumbitImages
                 </div>
               </div>
 
