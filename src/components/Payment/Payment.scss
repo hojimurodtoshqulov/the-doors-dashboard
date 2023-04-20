@@ -1,0 +1,154 @@
+@import "../../styles/styles.scss";
+
+.payment {
+  padding: 6rem 6.3rem;
+  background-color: $white;
+  box-shadow: 0.1rem 0.1rem 0.8rem rgba(0, 0, 0, 0.4);
+  max-width: 138rem;
+  width: 100%;
+  position: fixed;
+  overflow: auto;
+  top: 0;
+  left: 50%;
+  bottom: 0;
+  z-index: 60;
+  transform: translateX(-50%);
+
+  @include tablet {
+    padding: 5rem 2rem;
+  }
+
+  &__header {
+    @include between-center;
+    margin-bottom: 6.9rem;
+  }
+
+  &__title {
+    font-size: 4.4rem;
+    color: black;
+    font-family: "NextArt-Bold", sans-serif;
+
+    @include tablet {
+      font-size: 3rem;
+    }
+  }
+
+  &__close-icon {
+    font-size: 3rem;
+    color: black;
+    cursor: pointer;
+  }
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    @include laptop {
+      flex-direction: column;
+    }
+  }
+
+  &__inputs {
+    input:not([type="checkbox"]) {
+      display: block;
+      width: 39.2rem;
+      padding: 1rem 0.5rem;
+      font-size: 2.2rem;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid #797979;
+      color: #797979;
+      margin-bottom: 6rem;
+
+      @include laptop {
+        width: 100%;
+      }
+
+      @include tablet {
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  &__titles {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+
+    p {
+      font-family: "NextArt-semibold", sans-serif;
+      font-size: 2.8rem;
+      color: #797979;
+
+      @include tablet {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  &__incDec {
+    display: flex;
+    align-items: center;
+    button {
+      width: 63px;
+      height: 62px;
+      background-color: transparent;
+      border: 2px solid #797979;
+      border-radius: 10px;
+      font-size: 3rem;
+      color: #797979;
+    }
+
+    p {
+      margin: 0 3.7rem;
+    }
+  }
+
+  &__right {
+    input {
+      display: block;
+      border: 2px solid #797979;
+      border-radius: 10px;
+      padding: 1.9rem 2.4rem;
+      color: #797979;
+      font-size: 2.2rem;
+      outline: none;
+      margin-bottom: 3.5rem;
+      width: 100%;
+
+      @include tablet {
+        font-size: 1.8rem;
+      }
+    }
+
+    @include laptop-xl {
+      width: 50%;
+    }
+
+    @include laptop {
+      margin-top: 5rem;
+      width: 100%;
+    }
+  }
+
+  &__lastInput {
+    display: flex;
+    justify-content: space-between;
+
+    input {
+      width: 45%;
+    }
+  }
+
+  &__submit-btn {
+    background-color: $blue;
+    font-size: 2.8rem;
+    padding: 1.9rem 2.4rem;
+    color: $white;
+    border-radius: 1rem;
+
+    @include tablet {
+      font-size: 1.8rem;
+    }
+  }
+}

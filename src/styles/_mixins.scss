@@ -1,0 +1,47 @@
+@mixin center-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin between-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin large-screen {
+  @media screen and (max-width: 1500px) {
+    @content;
+  }
+}
+
+@mixin laptop-xxl {
+  @media screen and (max-width: 1400px) {
+    @content;
+  }
+}
+
+@mixin laptop-xl {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media screen and (max-width: 992px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (max-width: 760px) {
+    @content;
+  }
+}
+
+@mixin phones {
+  @media screen and (max-width: 576px) {
+    @content;
+  }
+}

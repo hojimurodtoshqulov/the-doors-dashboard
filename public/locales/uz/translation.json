@@ -1,0 +1,18 @@
+{
+  "courses": {
+    "title": "kurslar",
+    "button": "hammasini ko'rish"
+  },
+  "aboutus": {
+    "header": "biz haqimizda",
+    "title": "frontend development kursi",
+    "info": "Interfeys dizayneri – foydalanuvchi tajribasi asosida veb-saytlar va boshqa dasturiy yechimlarning vizual ko‘rinishini ishlab chiquvchi, ularni qulay, o‘qilishi va tashrif buyuruvchilar uchun foydali qiladigan mutaxassis."
+  },
+  "teacher": {
+    "header": "Ustozlar",
+    "info": "Tanishing, ko'p yillik tajribaga ega iqtidorli o'qituvchilarimiz!"
+  },
+  "calendar": {
+    "notFound": "Kurs topilmadi"
+  }
+}

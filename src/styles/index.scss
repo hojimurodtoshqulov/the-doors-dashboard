@@ -1,0 +1,41 @@
+@import "./fonts.scss";
+@import "./styles.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "NextArt-regular", sans-serif;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+.card-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @include laptop {
+    justify-content: space-evenly;
+  }
+}
+
+.active-link {
+  color: $blue !important;
+
+  span {
+    color: $blue !important;
+  }
+}

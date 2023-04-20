@@ -1,0 +1,51 @@
+export const weekdays = {
+  ru: {
+    Mon: "понедельник",
+    Tue: "вторник",
+    Wed: "среда",
+    Thu: "четверг",
+    Fri: "пятница",
+    Sat: "суббота",
+    Sun: "воскресенье",
+  },
+  uz: {
+    Mon: "dushanba",
+    Tue: "seshanba",
+    Wed: "chorshanba",
+    Thu: "payshanba",
+    Fri: "juma",
+    Sat: "shanba",
+    Sun: "yakshanba",
+  },
+};
+
+export const months = {
+  ru: {
+    January: "январь",
+    February: "февраль",
+    March: "март",
+    April: "апрель",
+    May: "май",
+    June: "июнь",
+    July: "июль",
+    August: "август",
+    September: "сентябрь",
+    October: "октябрь",
+    November: "ноябрь",
+    December: "декабрь",
+  },
+  uz: {
+    January: "yanvar",
+    February: "fevral",
+    March: "mart",
+    April: "aprel",
+    May: "may",
+    June: "iyun",
+    July: "iyul",
+    August: "avgust",
+    September: "sentabr",
+    October: "oktabr",
+    November: "noyabr",
+    December: "dekabr",
+  },
+};
