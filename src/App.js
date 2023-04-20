@@ -37,9 +37,9 @@ import { NotificationContainer } from "react-notifications";
 
 import { useTranslation } from "react-i18next";
 import { ScrollTop } from "./components";
-import TeachersAdmin from "./components/pages/TeachersAdmin/TeachersAdmin";
-import TeacherCreate from "./components/pages/TeachersAdmin/TeacherCreate";
-import TeacherView from "./components/pages/TeachersAdmin/TeacherView";
+import ProductsAdmin from "./components/pages/ProductsAdmin/ProductsAdmin";
+import ProductsCreate from "./components/pages/ProductsAdmin/ProductsCreate";
+import ProductsView from "./components/pages/ProductsAdmin/ProductsView";
 import axios from "axios";
 
 function App() {
@@ -88,9 +88,9 @@ function App() {
           <Route path="menu/create" element={<MenuCreate />} />
           <Route path="menu/view/:id" element={<MenuView />} />
 
-          <Route path="teacher" element={<TeachersAdmin />} />
-          <Route path="teacher/create" element={<TeacherCreate />} />
-          <Route path="teacher/view/:id" element={<TeacherView />} />
+          <Route path="product" element={<ProductsAdmin />} />
+          <Route path="product/create" element={<ProductsCreate />} />
+          <Route path="product/view/:id" element={<ProductsView />} />
 
           <Route path="setting" element={<LangSetting />} />
           <Route path="setting/create" element={<LangSettingCreate />} />

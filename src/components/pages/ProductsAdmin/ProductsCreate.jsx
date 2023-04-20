@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { NotificationManager } from "react-notifications";
 import Switch from "../../layouts/switch/Switch";
 import Uploader from "../../layouts/uploader/Uploader";
+import ImageUploadPreviewComponent from "../../imageUploader";
 
-export default function TeacherCreate() {
+export default function ProductsCreate() {
   const [categoryId, setCategoryId] = useState(0);
   const [lang, setLang] = useState([]);
   const [data, setData] = useState({
@@ -70,7 +71,7 @@ export default function TeacherCreate() {
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">User create form</h6>
+            <h6 className="mb-4">Create a product</h6>
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-md-6">
@@ -106,26 +107,43 @@ export default function TeacherCreate() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Info : ru
+                      Description : ru
                     </label>
-                    <input
-                      type="text"
+                    <textarea
                       name="short_content_ru"
+                      // lang={item.key}
+                      // value={data["short_content_" + item.key]}
                       onChange={handleChange}
                       className="form-control"
-                      id="exampleInputEmail1"
-                      required
+                      id="short_content_ru"
+                      rows={6}
                     />
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Info : uz
+                      Description : uz
+                    </label>
+                    <textarea
+                      name="short_content_ru"
+                      // lang={item.key}
+                      // value={data["short_content_" + item.key]}
+                      onChange={handleChange}
+                      className="form-control"
+                      id="short_content_ru"
+                      rows={6}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Price
                     </label>
                     <input
-                      type="text"
-                      name="short_content_uz"
+                      type="number"
+                      name="name_ru"
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
@@ -133,53 +151,26 @@ export default function TeacherCreate() {
                     />
                   </div>
                 </div>
-                {/* <div className="col-6">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleInputPassword1"
-                      className="form-label"
-                    >
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputPassword1"
-                      required
-                    />
-                  </div>
-                </div> */}
-                {/* <div className="col-6">
-                  <select
-                    className="form-select   mb-3"
-                    name="role"
-                    onChange={handleChange}
-                    aria-label=".form-select-sm example"
-                    required
-                  >
-                    <option value="">Please select</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div> */}
-                {/* <div className="col-6">
-                  <select
-                    className="form-select   mb-3"
-                    name="status"
-                    onChange={handleChange}
-                    aria-label=".form-select-sm example"
-                  >
-                    <option value="false">Inactive</option>
-                    <option value="true">Active</option>
-                  </select>
-                </div> */}
-
                 <div className="col-md-6">
-                  <Switch setData={setData} value={data.status} />
+                  <div className="mb-3">
+                    <div className="form-group">
+                      <label htmlFor="images">Select Images:</label>
+                      <input
+                        type="file"
+                        className="form-control-file"
+                        id="images"
+                        name="images"
+                        multiple
+                        // onChange={handleFileSelect}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="col-12 pb-3 mb-3 border-bottom">
-                  <button
+                  <div class="mb-3">
+                    <ImageUploadPreviewComponent />
+                  </div>
+                  {/* <button
                     type="button"
                     className="btn btn-primary"
                     data-bs-toggle="modal"
@@ -191,7 +182,7 @@ export default function TeacherCreate() {
                     <Uploader category="teachers" category_id={categoryId} />
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </div>
               </div>
 

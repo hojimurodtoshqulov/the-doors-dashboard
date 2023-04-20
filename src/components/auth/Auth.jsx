@@ -18,22 +18,19 @@ export default function Auth() {
     event.preventDefault();
 
     navigate("/", { replace: true });
-    console.log(
-      baseUrl    );
-    fetch(
-      `${baseUrl}/auth/login?username=${data.username}&password=${data.password}`
-    )
+
+    axios
+      .post(`${baseUrl}/auth`, data)
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
-          // const token = res.data.token;
-          // const tokenData = jwt(tokeusn);
-          // if (tokenData.role == "admin") {
-          //   sessionStorage.setItem("token", token);
-          //   navigate("/admin", { replace: true });
-          // } else {
-          //   alert("Admin user not found");
-          // }
+          const token = res.data.message;
+          const tokenData = jwt(token);
+          if (tokenData.sub === "admin") {
+            sessionStorage.setItem("token", token);
+            navigate("/", { replace: true });
+          } else {
+            alert("Admin user not found");
+          }
         }
       })
       .catch((err) => {

@@ -31,7 +31,7 @@ function TeachersAdmin({ usersState, updateUsers }) {
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
             <div className="d-flex justify-content-between">
-              <h6 className="mb-4">Teachers </h6>
+              <h6 className="mb-4">Products </h6>
               <NavLink to="create" className="btn btn-dark rounded-pill ">
                 Create
               </NavLink>

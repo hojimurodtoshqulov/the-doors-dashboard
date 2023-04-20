@@ -12,12 +12,14 @@ function Pages() {
   htmlElement.classList.remove("not-adminPages");
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+
   useEffect(() => {
     const sessionToken = sessionStorage.getItem("token");
     console.log(sessionToken);
     if (sessionToken) {
       const tokenData = jwt(sessionToken);
-      if (tokenData.role !== "admin") {
+      console.log(tokenData.role !== "admin");
+      if (tokenData.sub !== "admin") {
         navigate("/login", { replace: true });
       } else {
         setToken(tokenData);
