@@ -64,37 +64,10 @@ function Header(props) {
             <NavLink
               to="#"
               className="dropdown-item"
-              onClick={() => changeLanguage("en")}
-            >
-              En
-            </NavLink>
-            <NavLink
-              to="#"
-              className="dropdown-item"
               onClick={() => changeLanguage("uz")}
             >
               Uz
             </NavLink>
-          </div>
-        </div>
-        <div className="nav-item dropdown">
-          <NavLink
-            to="#"
-            className="nav-link dropdown-toggle"
-            data-bs-toggle="dropdown"
-          >
-            {/* <img className="rounded-circle me-lg-2" src={Img1} alt="" style={{width: "40px", height: "40px"}}/> */}
-            <span className="d-none d-lg-inline-flex">
-              {props.token.username}
-            </span>
-          </NavLink>
-          <div className="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-            <NavLink to="/admin/setting" className="dropdown-item">
-              Settings
-            </NavLink>
-            <button type="button" onClick={LogOut} className="dropdown-item">
-              Log Out
-            </button>
           </div>
         </div>
       </div>

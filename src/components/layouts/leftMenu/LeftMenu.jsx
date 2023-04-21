@@ -28,32 +28,32 @@ function LeftMenu() {
         <NavLink to="/" className="navbar-brand mx-4 mb-3">
           {" "}
           <h3 className="text-primary">
-            <i className="fa fa-user-edit me-2"></i>DarkPan
+            <i className="fa fa-user-edit me-2"></i>Admin
           </h3>
         </NavLink>
 
         <div className={`${s.navbar_nav} navbar-nav w-100`}>
-          <NavLink to="/users" className={`${s.nav_link} nav-item nav-link`}>
+          {/* <NavLink to="/users" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-user me-2"></i>Users
-          </NavLink>
+          </NavLink> */}
           <NavLink to="/product" className={`${s.nav_link} nav-item nav-link`}>
-            <i className="fa fa-solid fa-user me-2"></i>Products
+            <i className="fa fa-solid fa-th me-2"></i>Products
           </NavLink>
-          <NavLink to="/menu" className={`${s.nav_link} nav-item nav-link`}>
+          {/* <NavLink to="/menu" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-bars me-2"></i>Menu
-          </NavLink>
-          <NavLink to="/news" className={`${s.nav_link} nav-item nav-link`}>
+          </NavLink> */}
+          {/* <NavLink to="/news" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-th me-2"></i>News
-          </NavLink>
-          <NavLink to="/courses" className={`${s.nav_link} nav-item nav-link`}>
+          </NavLink> */}
+          {/* <NavLink to="/courses" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-th me-2"></i>Courses
-          </NavLink>
-          <NavLink
+          </NavLink> */}
+          {/* <NavLink
             to="/courses-category"
             className={`${s.nav_link} nav-item nav-link`}
           >
             <i className="fa fa-solid fa-th me-2"></i>Category
-          </NavLink>
+          </NavLink> */}
 
           {/* <div className="nav-item dropdown">
                     <a href="#" className={`${s.nav_link} nav-link ${s.dropdown_toggle} dropdown-toggle`} data-bs-toggle="dropdown"><i className="fa fa-laptop me-2"></i>Elements</a>

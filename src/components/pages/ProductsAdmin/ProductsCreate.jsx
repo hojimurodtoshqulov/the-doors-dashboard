@@ -228,7 +228,6 @@ export default function ProductsCreate() {
                       handleChange={handleImageChange}
                     />
                   </div>
-                  sumbitImages
                 </div>
               </div>
 
