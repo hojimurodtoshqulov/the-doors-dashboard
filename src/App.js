@@ -10,7 +10,7 @@ import UserCreate from "./components/pages/users/userCreate/UserCreate";
 import UserView from "./components/pages/users/userView/UserView";
 import Menu from "./components/pages/menu/Menu";
 import MenuCreate from "./components/pages/menu/menuCreate/MenuCreate";
-import MenuView from "./components/pages/menu/menuView/MenuView";
+import OrderView from "./components/pages/menu/orderView/MenuView";
 import LangSetting from "./components/pages/langSetting/LangSetting";
 import LangSettingCreate from "./components/pages/langSetting/langSettingCreate/LangSettingCreate";
 import LangSettingView from "./components/pages/langSetting/langSettingView/LangSettingView";
@@ -74,9 +74,9 @@ function App() {
           <Route path="users/create" element={<UserCreate />} />
           <Route path="users/view/:id" element={<UserView />} />
 
-          <Route path="menu" element={<Menu />} />
-          <Route path="menu/create" element={<MenuCreate />} />
-          <Route path="menu/view/:id" element={<MenuView />} />
+          <Route path="order" element={<Menu />} />
+          {/* <Route path="menu/create" element={<MenuCreate />} /> */}
+          <Route path="order/:id" element={<OrderView />} />
 
           <Route path="product" element={<ProductsAdmin />} />
           <Route path="product/create" element={<ProductsCreate />} />

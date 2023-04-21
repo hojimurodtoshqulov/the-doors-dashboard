@@ -39,9 +39,9 @@ function LeftMenu() {
           <NavLink to="/product" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-th me-2"></i>Products
           </NavLink>
-          {/* <NavLink to="/menu" className={`${s.nav_link} nav-item nav-link`}>
-            <i className="fa fa-solid fa-bars me-2"></i>Menu
-          </NavLink> */}
+          <NavLink to="/order" className={`${s.nav_link} nav-item nav-link`}>
+            <i className="fa fa-solid fa-bars me-2"></i>Order
+          </NavLink>
           {/* <NavLink to="/news" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-th me-2"></i>News
           </NavLink> */}

@@ -8,72 +8,61 @@ import axios from "axios";
 import Uploader from "../../../layouts/uploader/Uploader";
 import { NotificationManager } from "react-notifications";
 import DatePicker from "react-datepicker";
+import { baseUrl } from "../../../../shared/constants";
 
 export default function MenuView() {
-  const [data, setData] = useState({
-    title_en: "",
-    title_ru: "",
-    title_uz: "",
-    content_en: "",
-    content_ru: "",
-    content_uz: "",
-    category_id: 0,
-    options: "",
-    other_link: "",
-    created_on: new Date(),
-    alias: "",
-    status: false,
-  });
+  const [data, setData] = useState({});
   const params = useParams();
   const id = params.id;
   const navigation = useNavigate();
   const [lang, setLang] = useState([]);
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}menu/get/${id}`).then((res) => {
-      setData(res.data.data);
-    });
+    // axios.get(`${process.env.REACT_APP_API_URL}menu/get/${id}`).then((res) => {
+    //   setData(res.data.data);
+    // });
 
-    axios.get(`${process.env.REACT_APP_API_URL}lang/get`).then((res) => {
-      setLang(res.data.data.result);
+    axios.get(`${baseUrl}/order/${id}`).then((res) => {
+      console.log(res);
+      setLang(res.data);
     });
   }, []);
 
-  const handleChange = (event) => {
-    const inputName = event.target.name;
-    const inputValue = event.target.value;
-    const lang = event.target.lang;
-    if (lang) {
-      let nameIn = inputName + "_" + lang;
-      if (inputName == "title") {
-        const slugifyTest = slug(inputValue, { locale: "bg" });
-        setData((oldValue) => ({ ...oldValue, ["alias"]: slugifyTest }));
-      }
-      // setData(oldValue=>({...oldValue, [inputName]: {...oldValue[inputName],  [lang]:inputValue}}))
-      setData((oldValue) => ({ ...oldValue, [nameIn]: inputValue }));
-    } else {
-      setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
-    }
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (data.title_ru.length > 0) {
-      data.created_on = Math.floor(new Date(data.created_on).getTime() / 1000);
+  // const handleChange = (event) => {
+  //   const inputName = event.target.name;
+  //   const inputValue = event.target.value;
+  //   const lang = event.target.lang;
+  //   if (lang) {
+  //     let nameIn = inputName + "_" + lang;
+  //     if (inputName == "title") {
+  //       const slugifyTest = slug(inputValue, { locale: "bg" });
+  //       setData((oldValue) => ({ ...oldValue, ["alias"]: slugifyTest }));
+  //     }
+  //     // setData(oldValue=>({...oldValue, [inputName]: {...oldValue[inputName],  [lang]:inputValue}}))
+  //     setData((oldValue) => ({ ...oldValue, [nameIn]: inputValue }));
+  //   } else {
+  //     setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
+  //   }
+  // };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   if (data.title_ru.length > 0) {
+  //     data.created_on = Math.floor(new Date(data.created_on).getTime() / 1000);
 
-      axios
-        .put(`${process.env.REACT_APP_API_URL}menu/update/${id}`, data)
-        .then((res) => {
-          if (res.status == 200) {
-            navigation("/admin/menu", { replace: true });
-          }
-        });
-    } else {
-      NotificationManager.warning(
-        "Please fill in the fields",
-        "Form validation",
-        3000
-      );
-    }
-  };
+  //     axios
+  //       .put(`${process.env.REACT_APP_API_URL}menu/update/${id}`, data)
+  //       .then((res) => {
+  //         if (res.status == 200) {
+  //           navigation("/admin/menu", { replace: true });
+  //         }
+  //       });
+  //   } else {
+  //     NotificationManager.warning(
+  //       "Please fill in the fields",
+  //       "Form validation",
+  //       3000
+  //     );
+  //   }
+  // };
 
   return (
     <div className="container-fluid pt-4 px-4">
@@ -81,7 +70,7 @@ export default function MenuView() {
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
             <h6 className="mb-4">Menu create form</h6>
-            <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            {/* <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
               {lang.map((item, index) => {
                 index++;
                 return (
@@ -246,7 +235,7 @@ export default function MenuView() {
                   </div>
                 );
               })}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
