@@ -6,35 +6,45 @@ import { useDispatch, useSelector } from "react-redux";
 import { baseUrl } from "../../../shared/constants";
 import { useTranslation } from "react-i18next";
 
+import Spinner from "../../spinner";
+import { jwtApi } from "../../../api/jwtApi";
+
 function TeachersAdmin({ usersState, updateUsers }) {
   const navigation = useNavigate();
   const [data, setData] = useState([]);
   const [count, setCount] = useState(1);
+  const [pageLoad, setPageLoad] = useState(false);
 
   const { i18n } = useTranslation();
 
   const handleDelete = (id) => {
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}teachers/delete/${id}`)
-      .then((res) => {
-        if (res.status == 200) {
-          setCount(count + 1);
-          // navigation("/admin/users", { replace: true } )
-        }
-      });
+    jwtApi.delete(`/products/${id}`).then((res) => {
+      if (res.status == 200) {
+        setCount(count + 1);
+        // navigation("/admin/users", { replace: true } )
+      }
+    });
   };
 
   const title = i18n.language === "ru" ? "titleRu" : "titleUz";
 
   useEffect(() => {
-    axios.get(`${baseUrl}/products`).then((res) => {
-      console.log(res);
+    setPageLoad(true);
+    axios
+      .get(`${baseUrl}/products`)
+      .then((res) => {
+        console.log(res);
 
-      setData(res.data);
-    });
+        setData(res.data);
+      })
+      .finally(() => {
+        setPageLoad(false);
+      });
   }, [count]);
 
-  return (
+  return pageLoad ? (
+    <Spinner />
+  ) : (
     <div className="container-fluid pt-4 px-4">
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">

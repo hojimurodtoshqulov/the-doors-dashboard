@@ -1,31 +1,29 @@
 import React from "react";
 import ImageUploader from "react-images-upload";
 
-class UploadComponent extends React.Component {
-  onDrop = (pictureFiles, pictureDataURLs) => {
-    const newImagesUploaded = pictureDataURLs.slice(
-      this.props.defaultImages.length
-    );
+const UploadComponent = (props) => {
+  const onDrop = (pictureFiles, pictureDataURLs) => {
+    const newImagesUploaded = pictureDataURLs.slice(props.defaultImages.length);
     console.warn("pictureDataURLs =>", newImagesUploaded);
-    this.props.handleChange(newImagesUploaded);
+    props.handleChange(pictureFiles, pictureDataURLs);
   };
 
-  render() {
-    return (
-      <ImageUploader
-        withIcon={false}
-        withLabel={false}
-        withPreview={true}
-        buttonText={"Add photos"}
-        fileSizeError={"File size is too big!"}
-        fileTypeError={"Upload png or jpg!"}
-        onChange={this.onDrop}
-        imgExtension={this.props.imgExtension}
-        maxFileSize={this.props.maxFileSize}
-        // defaultImages={this.props.defaultImages}
-      />
-    );
-  }
-}
+  const btnText = props.btnType === "edit" ? "Change photos" : "Add photos";
+
+  return (
+    <ImageUploader
+      withIcon={false}
+      withLabel={false}
+      withPreview={true}
+      buttonText={btnText}
+      fileSizeError={"File size is too big!"}
+      fileTypeError={"Upload png or jpg!"}
+      onChange={onDrop}
+      imgExtension={props.imgExtension}
+      maxFileSize={props.maxFileSize}
+      defaultImages={props.defaultImages}
+    />
+  );
+};
 
 export default UploadComponent;

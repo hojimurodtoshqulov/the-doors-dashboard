@@ -26,7 +26,11 @@ export default function ProductsCreate() {
     defaultImages: [],
   });
 
+  const [loading, setLoading] = useState(false);
+  // const [pageLoad, setPageLoad] = useState(false);
+
   const handleImageChange = (files) => {
+    console.log(files);
     setUpload(
       (prevUpload) => ({
         ...prevUpload,
@@ -37,6 +41,10 @@ export default function ProductsCreate() {
       }
     );
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   const sumbitImages = async () => {
     try {
@@ -49,7 +57,9 @@ export default function ProductsCreate() {
       pictures[0].forEach((base64) => {
         formData.append(
           "file",
-          new File([base64], `image${crypto.randomUUID()}`)
+          new File([base64], `image${crypto.randomUUID()}`, {
+            type: "image/jpeg",
+          })
         );
       });
 
@@ -80,6 +90,7 @@ export default function ProductsCreate() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     try {
       const attachmentContentsId = await sumbitImages();
@@ -96,7 +107,10 @@ export default function ProductsCreate() {
       const res = await jwtApi.post("/products", dataToSubmit);
 
       console.log(res);
+      setLoading(false);
+      navigation("/product");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
 
@@ -219,6 +233,7 @@ export default function ProductsCreate() {
               </div>
 
               <button
+                disabled={loading}
                 type="button"
                 onClick={() => {
                   navigation("/admin/teacher");
@@ -228,8 +243,12 @@ export default function ProductsCreate() {
                 Back
               </button>
 
-              <button type="submit" className="btn btn-primary">
-                Create
+              <button
+                disabled={loading}
+                type="submit"
+                className="btn btn-primary"
+              >
+                {loading ? "Loading..." : "Create"}
               </button>
             </form>
           </div>

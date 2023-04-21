@@ -8,10 +8,15 @@ import ImageUploadPreviewComponent from "../../imageUploader";
 import { baseUrl } from "../../../shared/constants";
 import { jwtApi } from "../../../api/jwtApi";
 
-export default function ProductsCreate() {
+import Spinner from "../../spinner";
+
+import "./style.scss";
+
+export default function ProductsEdit() {
   const { id } = useParams();
 
   const [data, setData] = useState({
+    id: 0,
     titleRu: "",
     titleUz: "",
     descriptionRu: "",
@@ -26,33 +31,94 @@ export default function ProductsCreate() {
     maxFileSize: 5242880,
     imgExtension: [".jpg", ".png"],
     defaultImages: [],
+    editStarted: false,
   });
 
-  const handleImageChange = (files) => {
+  const [loading, setLoading] = useState(false);
+  const [pageLoad, setPageLoad] = useState(false);
+
+  const handleImageChange = (files, base64) => {
+    if (!upload.editStarted) {
+      setUpload((prev) => {
+        return { ...prev, defaultImages: [base64[4]], editStarted: true };
+      });
+    }
+    setUpload(
+      (prevUpload) => {
+        return { ...prevUpload, pictures: [...files] };
+      },
+      () => {
+        console.warn(files);
+      }
+    );
+  };
+
+  // function createFileFromBase64(base64String) {
+  //   // console.log(base64String.slice(base64String.indexOf(",") + 1));
+  //   const binaryString = window.atob(
+  //     base64String.slice(base64String.indexOf(",") + 1)
+  //   );
+  //   const bytes = new Uint8Array(binaryString.length);
+  //   for (let i = 0; i < binaryString.length; i++) {
+  //     bytes[i] = binaryString.charCodeAt(i);
+  //   }
+  //   const file = new File([bytes.buffer], crypto.randomUUID(), {
+  //     type: "image/jpeg",
+  //   }); // change the type based on the file type
+  //   return file;
+  // }
+
+  const getProduct = async () => {
+    setPageLoad(true);
+    console.log("hello");
+    const res = await axios.get(`${baseUrl}/products/${id}`);
+
+    const productData = res.data;
+    setData(productData);
+    const base64Images = productData.attachmentContents;
+
+    let images = [];
+
+    base64Images.map(({ data }) => {
+      const img = `data:image/jpg;base64,${data}`;
+      images.push(img);
+    });
+
+    console.log();
+
     setUpload(
       (prevUpload) => ({
         ...prevUpload,
-        pictures: [files],
+        defaultImages: images,
       }),
       () => {
         console.warn("It was added!");
       }
     );
+
+    console.log(productData);
+    setPageLoad(false);
   };
 
+  useEffect(() => {
+    getProduct();
+    setLoading(false);
+  }, []);
+
   const sumbitImages = async () => {
+    if (!upload.editStarted)
+      return data.attachmentContents.map((item) => item.id);
     try {
       const formData = new FormData();
 
       const { pictures, defaultImages } = upload;
 
-      if (pictures[0].length !== 4) throw new Error("Upload 4 images");
+      const allPics = [...pictures];
 
-      pictures[0].forEach((base64) => {
-        formData.append(
-          "file",
-          new File([base64], `image${crypto.randomUUID()}`)
-        );
+      if (allPics.length !== 4) throw new Error("Upload 4 images");
+
+      allPics.forEach((file) => {
+        formData.append("file", file);
       });
 
       const res = await axios.post(`${baseUrl}/files`, formData, {
@@ -64,7 +130,7 @@ export default function ProductsCreate() {
 
       return res.data;
     } catch (error) {
-      NotificationManager.error(error.message, "Images error");
+      NotificationManager.error(error.message, "Image error");
       console.log(error);
     }
   };
@@ -78,14 +144,15 @@ export default function ProductsCreate() {
     setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
   };
 
-  useEffect(() => {}, []);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     try {
       const attachmentContentsId = await sumbitImages();
+
       const dataToSubmit = {
+        id: data.id,
         titleUz: data.titleUz,
         titleRu: data.titleRu,
         descriptionUz: data.descriptionUz,
@@ -95,23 +162,35 @@ export default function ProductsCreate() {
         attachmentContentsId,
       };
 
+      console.log(data);
+
       const res = await jwtApi.post("/products", dataToSubmit);
 
       console.log(res);
+
+      NotificationManager.success("Product updated", "Success");
+      setLoading(false);
+      navigation("/product");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
 
     sumbitImages();
   };
 
-  return (
+  return pageLoad ? (
+    <Spinner />
+  ) : (
     <div className="container-fluid pt-4 px-4">
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
             <h6 className="mb-4">Edit the product</h6>
-            <form onSubmit={handleSubmit}>
+            <form
+              className={`${!upload.editStarted && "hideCloseBtns"}`}
+              onSubmit={handleSubmit}
+            >
               <div className="row">
                 <div className="col-md-6">
                   <div className="mb-3">
@@ -212,26 +291,31 @@ export default function ProductsCreate() {
                 <div className="col-12 pb-3 mb-3 border-bottom">
                   <div class="mb-3">
                     <ImageUploadPreviewComponent
+                      btnType="edit"
                       {...upload}
                       handleChange={handleImageChange}
                     />
                   </div>
-                  sumbitImages
                 </div>
               </div>
 
               <button
+                disabled={loading}
                 type="button"
                 onClick={() => {
-                  navigation("/admin/teacher");
+                  navigation("/product");
                 }}
                 className="btn btn-warning me-3"
               >
                 Back
               </button>
 
-              <button type="submit" className="btn btn-primary">
-                Create
+              <button
+                disabled={loading}
+                type="submit"
+                className="btn btn-primary"
+              >
+                {loading ? "Loading..." : "Update"}
               </button>
             </form>
           </div>
