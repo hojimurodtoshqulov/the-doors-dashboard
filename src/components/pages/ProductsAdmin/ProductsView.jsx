@@ -38,9 +38,14 @@ export default function ProductsEdit() {
   const [pageLoad, setPageLoad] = useState(false);
 
   const handleImageChange = (files, base64) => {
+    console.log(base64);
     if (!upload.editStarted) {
       setUpload((prev) => {
-        return { ...prev, defaultImages: [base64[4]], editStarted: true };
+        return {
+          ...prev,
+          defaultImages: [...base64.slice(4)],
+          editStarted: true,
+        };
       });
     }
     setUpload(
@@ -170,8 +175,8 @@ export default function ProductsEdit() {
 
       console.log(res);
 
-      NotificationManager.success("Product updated", "Success");
       setLoading(false);
+      NotificationManager.success("Porduct edited", "Success");
       navigation("/product");
     } catch (error) {
       setLoading(false);

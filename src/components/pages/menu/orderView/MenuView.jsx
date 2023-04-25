@@ -92,9 +92,6 @@ export default function MenuView() {
     style: "currency",
     currency: "UZS",
   });
-
-  console.log("data>>>", data);
-
   return page ? (
     <Spinner />
   ) : (
@@ -123,7 +120,7 @@ export default function MenuView() {
                     </tr>
                     <tr>
                       <th scope="row">Message</th>
-                      <td>{data.message} lorem30</td>
+                      <td>{data.message}</td>
                     </tr>
                     <tr>
                       <th scope="row">Ordered time</th>
@@ -174,7 +171,7 @@ export default function MenuView() {
           </div>
         </div>
       </div>
-    </div>  
+    </div>
   );
 }
 
@@ -183,6 +180,7 @@ export default function MenuView() {
  */
 
 const ProductImages = ({ productData }) => {
+  const [autoplay, setAutoPlay] = useState(false);
   console.log(productData);
   const settings = {
     dots: true,
@@ -190,7 +188,6 @@ const ProductImages = ({ productData }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
     autoplaySpeed: 100,
     pauseOnHover: true,
   };
@@ -200,7 +197,7 @@ const ProductImages = ({ productData }) => {
   return (
     <div className={`${styles.sliderContainer} col mx-auto col-auto`}>
       <div className=" w-full mx-auto">
-        <Slider {...settings}>
+        <Slider autoplay={autoplay} {...settings}>
           {productData.map((item) => (
             <div>
               <img

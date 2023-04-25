@@ -102,16 +102,19 @@ export default function ProductsCreate() {
         titleRu: data.titleRu,
         descriptionUz: data.descriptionUz,
         descriptionRu: data.descriptionRu,
-        price: data.price,
-        discount: data.discount,
+        price: parseInt(data.price),
+        discount: parseInt(data.discount),
         attachmentContentsId,
       };
+
+      console.log(dataToSubmit);
 
       const res = await jwtApi.post("/products", dataToSubmit);
 
       console.log(res);
       setLoading(false);
       navigation("/product");
+      NotificationManager.success("Porduct created", "Success");
     } catch (error) {
       setLoading(false);
       NotificationManager.error(error.message, "Form validation");
