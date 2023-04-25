@@ -93,6 +93,9 @@ export default function ProductsCreate() {
     setLoading(true);
 
     try {
+      if (data.discount > 100)
+        throw new Error("Discount cannot be more then 100");
+
       const attachmentContentsId = await sumbitImages();
       const dataToSubmit = {
         titleUz: data.titleUz,
@@ -111,10 +114,9 @@ export default function ProductsCreate() {
       navigation("/product");
     } catch (error) {
       setLoading(false);
+      NotificationManager.error(error.message, "Form validation");
       console.log(error);
     }
-
-    sumbitImages();
   };
 
   return (

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import EditorText from "../../../layouts/editorText/EditorText";
 import slug from "slug";
 import Switch from "../../../layouts/switch/Switch";
@@ -9,23 +9,47 @@ import Uploader from "../../../layouts/uploader/Uploader";
 import { NotificationManager } from "react-notifications";
 import DatePicker from "react-datepicker";
 import { baseUrl } from "../../../../shared/constants";
+import Slider from "react-slick";
+import Spinner from "../../../spinner";
+import { BsTelephoneOutbound } from "react-icons/bs";
+
+import styles from "./style.module.scss";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 export default function MenuView() {
   const [data, setData] = useState({});
+  const [{ page, api }, setLoading] = useState({ page: true });
   const params = useParams();
   const id = params.id;
   const navigation = useNavigate();
   const [lang, setLang] = useState([]);
-  useEffect(() => {
-    // axios.get(`${process.env.REACT_APP_API_URL}menu/get/${id}`).then((res) => {
-    //   setData(res.data.data);
-    // });
 
-    axios.get(`${baseUrl}/order/${id}`).then((res) => {
-      console.log(res);
-      setLang(res.data);
-    });
+  const { i18n } = useTranslation();
+
+  const translatedProductName = i18n.language === "uz" ? "titleUz" : "titleRu";
+
+  const getOrderItem = async (id) => {
+    try {
+      setLoading((prev) => ({ ...prev, page: true }));
+      const { data } = await axios.get(`${baseUrl}/order/${id}`);
+      console.log(data);
+      setData(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading((prev) => ({ ...prev, page: false }));
+    }
+  };
+  useEffect(() => {
+    console.log("useEffect");
+    getOrderItem(id);
   }, []);
+
+  console.log(data);
 
   // const handleChange = (event) => {
   //   const inputName = event.target.name;
@@ -64,181 +88,132 @@ export default function MenuView() {
   //   }
   // };
 
-  return (
+  const numberFormatter = new Intl.NumberFormat("ru-RU", {
+    style: "currency",
+    currency: "UZS",
+  });
+
+  console.log("data>>>", data);
+
+  return page ? (
+    <Spinner />
+  ) : (
     <div className="container-fluid pt-4 px-4">
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Menu create form</h6>
-            {/* <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
-              {lang.map((item, index) => {
-                index++;
-                return (
-                  <li className="nav-item" role="presentation" key={index}>
-                    <button
-                      className={`nav-link ${index == 1 ? "active" : ""}  me-3`}
-                      id={`pills-lang-${index}`}
-                      data-bs-toggle="pill"
-                      data-bs-target={`#pills-lang${index}`}
-                      type="button"
-                      role="tab"
-                      aria-controls={`#pills-lang${index}`}
-                      aria-selected="true"
-                    >
-                      {item.title}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="tab-content" id="pills-tabContent">
-              {lang.map((item, index) => {
-                index++;
-                return (
-                  <div
-                    key={index}
-                    className={`tab-pane fade ${
-                      index == 1 ? "show active" : ""
-                    }`}
-                    id={`pills-lang${index}`}
-                    role="tabpanel"
-                    aria-labelledby={`pills-lang-${index}`}
-                  >
-                    <form onSubmit={handleSubmit}>
-                      <div className="row">
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="title" className="form-label">
-                              Title
-                            </label>
-                            <input
-                              type="text"
-                              name="title"
-                              lang={item.key}
-                              onChange={handleChange}
-                              value={data["title_" + item.key] || ""}
-                              className="form-control"
-                              id="title"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="content" className="form-label">
-                              Content
-                            </label>
-                            <EditorText
-                              setData={setData}
-                              lang={item.key}
-                              value={data["content_" + item.key]}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="options" className="form-label">
-                              Options
-                            </label>
-                            <input
-                              type="text"
-                              name="options"
-                              onChange={handleChange}
-                              value={data.options || ""}
-                              className="form-control"
-                              id="options"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="other_link" className="form-label">
-                              Other link
-                            </label>
-                            <input
-                              type="text"
-                              name="other_link"
-                              onChange={handleChange}
-                              value={data.other_link || ""}
-                              className="form-control"
-                              id="other_link"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="other_link" className="form-label">
-                              Date
-                            </label>
-                            <DatePicker
-                              className="form-control"
-                              dateFormat="dd.MM.yyyy HH:mm"
-                              selected={new Date(data.created_on)}
-                              onChange={(e) => {
-                                setData((old) => ({
-                                  ...old,
-                                  ["created_on"]: e,
-                                }));
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="alias" className="form-label">
-                              Alias
-                            </label>
-                            <input
-                              type="text"
-                              name="alias"
-                              onChange={handleChange}
-                              value={data.alias || ""}
-                              className="form-control"
-                              id="alias"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="col-6">
-                          <Switch setData={setData} value={data.status} />
-                        </div>
-                        <div className="col-12 pb-3 mb-3 border-bottom">
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#myModal"
-                          >
-                            Upload
-                          </button>
-                          {id ? (
-                            <Uploader category="menu" category_id={id} />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          navigation("/admin/menu");
-                        }}
-                        className="btn btn-warning me-3"
-                      >
-                        Back
-                      </button>
-
-                      <button type="submit" className="btn btn-primary">
-                        Update
-                      </button>
-                    </form>
-                  </div>
-                );
-              })}
-            </div> */}
+            <h6 className="mb-4">
+              Order by <span className="text-info">John Doe</span>
+            </h6>
+            <div className={`${styles.productContainer} row`}>
+              <ProductImages productData={data.product.attachmentContents} />
+              <div className="col ">
+                <table class="table bg-transparent">
+                  <thead>
+                    <tr>
+                      <th className="text-center" colSpan={2} scope="col">
+                        Order Detils
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Name</th>
+                      <td>{data.name}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Message</th>
+                      <td>{data.message} lorem30</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Ordered time</th>
+                      <td>
+                        {moment(data.orderedTime).format("HH:mm | DD.MM.YYYY")}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Phone number</th>
+                      <td>
+                        <a
+                          className="text-muted"
+                          href={`tel:+${data.phoneNumber}`}
+                        >
+                          {data.phoneNumber} <BsTelephoneOutbound />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="fit-content" scope="row">
+                        Product name
+                      </th>
+                      <td>{data.product[translatedProductName]}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Price</th>
+                      <td>{numberFormatter.format(data.product.price)}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Quantity</th>
+                      <td>{data.quantity}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total</th>
+                      <td>
+                        {numberFormatter.format(
+                          data.product.price * data.quantity
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <Link className="btn btn-warning" to={"/order"}>
+              Back
+            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </div>  
   );
 }
+
+/*
+ *     Subcomponents
+ */
+
+const ProductImages = ({ productData }) => {
+  console.log(productData);
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: false,
+    autoplaySpeed: 100,
+    pauseOnHover: true,
+  };
+
+  if (!productData.length) return null;
+
+  return (
+    <div className={`${styles.sliderContainer} col mx-auto col-auto`}>
+      <div className=" w-full mx-auto">
+        <Slider {...settings}>
+          {productData.map((item) => (
+            <div>
+              <img
+                className="img-cover"
+                width={250}
+                height={350}
+                src={`data:image/png;base64,${item.data}`}
+                alt=""
+              />
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </div>
+  );
+};

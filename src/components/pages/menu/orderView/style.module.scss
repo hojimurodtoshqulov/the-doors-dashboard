@@ -1,0 +1,18 @@
+.productContainer {
+  display: flex;
+  align-items: start;
+}
+.sliderContainer {
+  * {
+    outline: none;
+  }
+  width: 250px;
+  margin: 30px;
+  margin-top: 0;
+  outline: none;
+
+  img {
+    object-fit: cover;
+    outline: none;
+  }
+}
