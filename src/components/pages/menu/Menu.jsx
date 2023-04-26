@@ -3,7 +3,7 @@ import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { baseUrl } from "../../../shared/constants";
-import { jwtApi } from "../../../api/jwtApi";
+import { useJwtApi } from "../../../api/jwtApi";
 
 import Spinner from "../../spinner";
 
@@ -11,6 +11,8 @@ import moment from "moment";
 
 export default function Menu() {
   const { t, i18n } = useTranslation();
+
+  const { jwtApi } = useJwtApi();
 
   const [data, setData] = useState([]);
   const [count, setCount] = useState(1);
@@ -24,6 +26,7 @@ export default function Menu() {
         if (res.status == 200) {
           setCount(count + 1);
         }
+        setLoading((prev) => ({ ...prev, api: false }));
         return getOrders();
       })
       .finally(() => {
@@ -49,6 +52,8 @@ export default function Menu() {
     opacity: loading.api ? 0.5 : 1,
     pointerEvents: loading.api ? "none" : "unset",
   };
+
+  console.log(loadingState);
 
   console.log(data);
 

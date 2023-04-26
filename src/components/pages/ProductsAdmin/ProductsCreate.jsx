@@ -6,7 +6,7 @@ import Switch from "../../layouts/switch/Switch";
 import Uploader from "../../layouts/uploader/Uploader";
 import ImageUploadPreviewComponent from "../../imageUploader";
 import { baseUrl } from "../../../shared/constants";
-import { jwtApi } from "../../../api/jwtApi";
+import { useJwtApi } from "../../../api/jwtApi";
 
 export default function ProductsCreate() {
   const [data, setData] = useState({
@@ -18,6 +18,8 @@ export default function ProductsCreate() {
     discount: 0,
     attachmentContentsId: [],
   });
+
+  const { jwtApi } = useJwtApi();
 
   const [upload, setUpload] = useState({
     pictures: [],

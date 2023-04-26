@@ -4,10 +4,13 @@ import jwt from "jwt-decode";
 import s from "./Auth.module.css";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../shared/constants";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
 
 export default function Auth() {
   const htmlElement = document.querySelector("html");
   htmlElement.classList.remove("not-adminPages");
+  const { setToken } = useContext(AuthContext);
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -27,6 +30,8 @@ export default function Auth() {
           const tokenData = jwt(token);
           if (tokenData.sub === "admin") {
             sessionStorage.setItem("token", token);
+            setToken(token);
+
             navigate("/", { replace: true });
           } else {
             alert("Admin user not found");
@@ -53,10 +58,9 @@ export default function Auth() {
     setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
   };
   return (
-    <div className="scontainer-fluid">
+    <div className="scontainer-fluid overflow-hidden">
       <div
-        className="row h-100 align-items-center justify-content-center"
-        style={{ minHeight: "100vh" }}
+        className="row vh-100 hidden align-items-center justify-content-center"
       >
         <div className="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
           <div className="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">

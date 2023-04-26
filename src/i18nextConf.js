@@ -26,7 +26,7 @@ i18n
     },
 
     debug: false,
-    supportedLngs: ["en", "uz", "ru"],
+    supportedLngs: ["ru", "uz"],
     whitelist: availableLanguages,
 
     interpolation: {

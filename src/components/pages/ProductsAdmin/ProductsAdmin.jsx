@@ -7,23 +7,26 @@ import { baseUrl } from "../../../shared/constants";
 import { useTranslation } from "react-i18next";
 
 import Spinner from "../../spinner";
-import { jwtApi } from "../../../api/jwtApi";
+import { useJwtApi } from "../../../api/jwtApi";
 
 function TeachersAdmin({ usersState, updateUsers }) {
   const navigation = useNavigate();
   const [data, setData] = useState([]);
   const [count, setCount] = useState(1);
   const [pageLoad, setPageLoad] = useState(false);
+  const { jwtApi } = useJwtApi();
 
   const { i18n } = useTranslation();
 
   const handleDelete = (id) => {
-    jwtApi.delete(`/products/${id}`).then((res) => {
-      if (res.status == 200) {
-        setCount(count + 1);
-        // navigation("/admin/users", { replace: true } )
-      }
-    });
+    jwtApi
+      .delete(`/products/${id}`, { "Content-Type": "application/json" })
+      .then((res) => {
+        if (res.status == 200) {
+          setCount(count + 1);
+          // navigation("/admin/users", { replace: true } )
+        }
+      });
   };
 
   const title = i18n.language === "ru" ? "titleRu" : "titleUz";

@@ -6,7 +6,7 @@ import Switch from "../../layouts/switch/Switch";
 import Uploader from "../../layouts/uploader/Uploader";
 import ImageUploadPreviewComponent from "../../imageUploader";
 import { baseUrl } from "../../../shared/constants";
-import { jwtApi } from "../../../api/jwtApi";
+import { useJwtApi } from "../../../api/jwtApi";
 
 import Spinner from "../../spinner";
 
@@ -14,6 +14,7 @@ import "./style.scss";
 
 export default function ProductsEdit() {
   const { id } = useParams();
+  const { jwtApi } = useJwtApi();
 
   const [data, setData] = useState({
     id: 0,
@@ -88,8 +89,6 @@ export default function ProductsEdit() {
       const img = `data:image/jpg;base64,${data}`;
       images.push(img);
     });
-
-    console.log();
 
     setUpload(
       (prevUpload) => ({
