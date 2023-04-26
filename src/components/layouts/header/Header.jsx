@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import s from "./Header.module.css";
 import Img1 from "../../../assets/img/user.jpg";
 import $ from "jquery";
@@ -12,10 +12,19 @@ function Header(props) {
     i18n.changeLanguage(lng);
   };
 
+  const componetnJustMount = useRef(true);
+
   const sidebarClick = () => {
     $(".sidebar, .content").toggleClass("open");
     return false;
   };
+
+  useEffect(() => {
+    if (componetnJustMount) {
+      changeLanguage("ru");
+    }
+    componetnJustMount.current = false;
+  }, []);
 
   const LogOut = (event) => {
     event.preventDefault();
