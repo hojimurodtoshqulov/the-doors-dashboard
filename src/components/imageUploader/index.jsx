@@ -3,6 +3,8 @@ import ImageUploader from "react-images-upload";
 
 const UploadComponent = (props) => {
   const onDrop = (pictureFiles, pictureDataURLs) => {
+    console.log("picture files <<>><<>>", pictureFiles);
+    console.log("picture dataUrls <<>><<>>", pictureDataURLs);
     const newImagesUploaded = pictureDataURLs.slice(props.defaultImages.length);
     console.warn("pictureDataURLs =>", newImagesUploaded);
     props.handleChange(pictureFiles, pictureDataURLs);

@@ -43,6 +43,7 @@ import ProductsAdmin from "./components/pages/ProductsAdmin/ProductsAdmin";
 import ProductsCreate from "./components/pages/ProductsAdmin/ProductsCreate";
 import ProductsView from "./components/pages/ProductsAdmin/ProductsView";
 import axios from "axios";
+import Showcase from "./components/pages/showcase/showcase";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -70,9 +71,9 @@ function App() {
         <Route path="/" element={<Pages />}>
           {/* <Route index element={<Home />} /> */}
 
-          <Route path="users" element={<Users />} />
+          {/*   <Route path="users" element={<Users />} />
           <Route path="users/create" element={<UserCreate />} />
-          <Route path="users/view/:id" element={<UserView />} />
+          <Route path="users/view/:id" element={<UserView />} /> */}
 
           <Route path="order" element={<Menu />} />
           {/* <Route path="menu/create" element={<MenuCreate />} /> */}
@@ -82,19 +83,22 @@ function App() {
           <Route path="product/create" element={<ProductsCreate />} />
           <Route path="product/view/:id" element={<ProductsView />} />
 
+          <Route path="showcase" element={<Showcase />} />
+
+          {/* 
           <Route path="setting" element={<LangSetting />} />
           <Route path="setting/create" element={<LangSettingCreate />} />
-          <Route path="setting/view/:id" element={<LangSettingView />} />
-
+          <Route path="setting/view/:id" element={<LangSettingView />} /> */}
+          {/* 
           <Route path="news" element={<News />} />
           <Route path="news/create" element={<NewsCreate />} />
-          <Route path="news/view/:id" element={<NewsView />} />
-
+          <Route path="news/view/:id" element={<NewsView />} /> */}
+          {/* 
           <Route path="courses" element={<AdminCourses />} />
           <Route path="courses/create" element={<AdminCoursesCreate />} />
-          <Route path="courses/view/:id" element={<AdminCoursesView />} />
+          <Route path="courses/view/:id" element={<AdminCoursesView />} /> */}
 
-          <Route path="courses-category" element={<CoursesCategory />} />
+          {/*   <Route path="courses-category" element={<CoursesCategory />} />
           <Route
             path="courses-category/create"
             element={<CoursesCategoryCreate />}
@@ -102,7 +106,7 @@ function App() {
           <Route
             path="courses-category/view/:id"
             element={<CoursesCategoryView />}
-          />
+          /> */}
         </Route>
       </Routes>
 
