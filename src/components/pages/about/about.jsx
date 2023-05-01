@@ -17,13 +17,9 @@ export default function ProductsEdit() {
   const { jwtApi } = useJwtApi();
 
   const [data, setData] = useState({
-    titleRu: "",
-    titleUz: "",
     descriptionRu: "",
     descriptionUz: "",
     attachmentContentsId: [],
-    done: "",
-    created: "",
   });
 
   const [upload, setUpload] = useState({
@@ -43,7 +39,7 @@ export default function ProductsEdit() {
       setUpload((prev) => {
         return {
           ...prev,
-          defaultImages: [...base64.slice(3)],
+          defaultImages: [...base64.slice(2)],
           editStarted: true,
         };
       });
@@ -77,11 +73,11 @@ export default function ProductsEdit() {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/magnificent`);
+    const res = await axios.get(`${baseUrl}/about-us`);
 
     const productData = res.data;
     setData(productData);
-    const base64Images = productData.contents;
+    const base64Images = productData.attachmentContents;
 
     let images = [];
 
@@ -110,7 +106,8 @@ export default function ProductsEdit() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted) return data.contents.map((item) => item.id);
+    if (!upload.editStarted)
+      return data.attachmentContents.map((item) => item.id);
     try {
       const formData = new FormData();
 
@@ -118,7 +115,7 @@ export default function ProductsEdit() {
 
       const allPics = [...pictures];
 
-      if (allPics.length !== 3) throw new Error("Upload 3 images");
+      if (allPics.length !== 2) throw new Error("Upload 2 images");
 
       allPics.forEach((file) => {
         formData.append("file", file);
@@ -147,24 +144,19 @@ export default function ProductsEdit() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
       setLoading(true);
       const attachmentContentIds = await sumbitImages();
       const dataToSubmit = {
         id: 1,
-        titleUz: data.titleUz,
-        titleRu: data.titleRu,
         descriptionUz: data.descriptionUz,
         descriptionRu: data.descriptionRu,
-        done: parseInt(data.done),
-        created: parseInt(data.created),
         attachmentContentIds,
       };
 
       console.log(data);
 
-      const res = await jwtApi.post("/magnificent", dataToSubmit);
+      const res = await jwtApi.post("/about-us", dataToSubmit);
 
       console.log(res);
 
@@ -176,7 +168,7 @@ export default function ProductsEdit() {
         defaultImages: [],
         editStarted: false,
       });
-      NotificationManager.success("Works information", "Success");
+      NotificationManager.success("Showcase edited", "Success");
       getProduct();
     } catch (error) {
       setLoading(false);
@@ -192,44 +184,12 @@ export default function ProductsEdit() {
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Edit work information</h6>
+            <h6 className="mb-4">Edit about information</h6>
             <form
               className={`${!upload.editStarted && "hideCloseBtns"}`}
               onSubmit={handleSubmit}
             >
               <div className="row">
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                      Title : ru
-                    </label>
-                    <input
-                      type="text"
-                      name="titleRu"
-                      value={data.titleRu}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail1"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                      Title : uz
-                    </label>
-                    <input
-                      type="text"
-                      name="titleUz"
-                      value={data.titleUz}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail1"
-                      required
-                    />
-                  </div>
-                </div>
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
@@ -259,38 +219,6 @@ export default function ProductsEdit() {
                       className="form-control"
                       id="short_content_ru"
                       rows={6}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                      Projects Done
-                    </label>
-                    <input
-                      type="number"
-                      name="done"
-                      value={data.done}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail1"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                      Products Created
-                    </label>
-                    <input
-                      type="number"
-                      name="created"
-                      value={data.created}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail1"
-                      required
                     />
                   </div>
                 </div>

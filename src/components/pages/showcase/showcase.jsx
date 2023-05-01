@@ -188,7 +188,7 @@ export default function ProductsEdit() {
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Edit the product</h6>
+            <h6 className="mb-4">Edit showcase information</h6>
             <form
               className={`${!upload.editStarted && "hideCloseBtns"}`}
               onSubmit={handleSubmit}
