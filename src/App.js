@@ -44,6 +44,7 @@ import ProductsCreate from "./components/pages/ProductsAdmin/ProductsCreate";
 import ProductsView from "./components/pages/ProductsAdmin/ProductsView";
 import axios from "axios";
 import Showcase from "./components/pages/showcase/showcase";
+import Work from "./components/pages/work/work";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -84,6 +85,8 @@ function App() {
           <Route path="product/view/:id" element={<ProductsView />} />
 
           <Route path="showcase" element={<Showcase />} />
+
+          <Route path="work" element={<Work />} />
 
           {/* 
           <Route path="setting" element={<LangSetting />} />
