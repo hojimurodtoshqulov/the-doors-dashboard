@@ -48,6 +48,7 @@ import Work from "./components/pages/work/work";
 import About from "./components/pages/about/about";
 import VideoSubmit from "./components/pages/video/video";
 import WorkShowcase from "./components/pages/work-showcase/workShowcase";
+import ContactShowcase from "./components/pages/contactShowcase/contactShowcase";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -89,6 +90,7 @@ function App() {
 
           <Route path="showcase" element={<Showcase />} />
           <Route path="work-showcase" element={<WorkShowcase />} />
+          <Route path="contact-showcase" element={<ContactShowcase />} />
 
           <Route path="work" element={<Work />} />
 
