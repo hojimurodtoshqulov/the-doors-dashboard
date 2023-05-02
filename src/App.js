@@ -47,6 +47,7 @@ import Showcase from "./components/pages/showcase/showcase";
 import Work from "./components/pages/work/work";
 import About from "./components/pages/about/about";
 import VideoSubmit from "./components/pages/video/video";
+import WorkShowcase from "./components/pages/work-showcase/workShowcase";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -87,6 +88,7 @@ function App() {
           <Route path="product/view/:id" element={<ProductsView />} />
 
           <Route path="showcase" element={<Showcase />} />
+          <Route path="work-showcase" element={<WorkShowcase />} />
 
           <Route path="work" element={<Work />} />
 
