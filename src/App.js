@@ -46,6 +46,7 @@ import axios from "axios";
 import Showcase from "./components/pages/showcase/showcase";
 import Work from "./components/pages/work/work";
 import About from "./components/pages/about/about";
+import VideoSubmit from "./components/pages/video/video";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -90,6 +91,7 @@ function App() {
           <Route path="work" element={<Work />} />
 
           <Route path="about" element={<About />} />
+          <Route path="video" element={<VideoSubmit />} />
 
           {/* 
           <Route path="setting" element={<LangSetting />} />

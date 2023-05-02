@@ -1,0 +1,39 @@
+.video_wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2rem;
+  align-items: start;
+
+  video {
+    max-height: 80vh;
+    display: block;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .progress-box {
+    width: 100%;
+  }
+
+  .progress-data-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .progress-path {
+    width: 100%;
+    height: 15px;
+    background: #4343439f;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  .completed-progress {
+    width: 76%;
+    height: 100%;
+    display: block;
+    border-radius: 5px;
+    background-color: #eb1616;
+  }
+}
