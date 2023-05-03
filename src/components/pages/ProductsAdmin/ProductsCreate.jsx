@@ -8,6 +8,10 @@ import ImageUploadPreviewComponent from "../../imageUploader";
 import { baseUrl } from "../../../shared/constants";
 import { useJwtApi } from "../../../api/jwtApi";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "./quilStyle.scss";
+
 export default function ProductsCreate() {
   const [data, setData] = useState({
     titleRu: "",
@@ -81,7 +85,7 @@ export default function ProductsCreate() {
 
   const navigation = useNavigate();
 
-  const handleChange = (event) => {
+  const handleChange = (event, key) => {
     const inputName = event.target.name;
     const inputValue = event.target.value;
 
@@ -169,7 +173,7 @@ export default function ProductsCreate() {
                     <label htmlFor="exampleInputEmail1" className="form-label">
                       Description : ru
                     </label>
-                    <textarea
+                    {/*  <textarea
                       name="descriptionRu"
                       // lang={item.key}
                       value={data.descriptionRu}
@@ -177,6 +181,16 @@ export default function ProductsCreate() {
                       className="form-control"
                       id="short_content_ru"
                       rows={6}
+                    /> */}
+                    <ReactQuill
+                      theme={"snow"}
+                      value={data.descriptionRu}
+                      onChange={(val) => {
+                        const event = {
+                          target: { value: val, name: "descriptionRu" },
+                        };
+                        handleChange(event);
+                      }}
                     />
                   </div>
                 </div>
@@ -185,14 +199,24 @@ export default function ProductsCreate() {
                     <label htmlFor="exampleInputEmail1" className="form-label">
                       Description : uz
                     </label>
-                    <textarea
+                    {/*  <textarea
                       name="descriptionUz"
                       // lang={item.key}
                       value={data.descriptionUz}
-                      onChange={handleChange}
+                      
                       className="form-control"
                       id="short_content_ru"
                       rows={6}
+                    /> */}
+                    <ReactQuill
+                      theme={"snow"}
+                      value={data.descriptionUz}
+                      onChange={(val) => {
+                        const event = {
+                          target: { value: val, name: "descriptionUz" },
+                        };
+                        handleChange(event);
+                      }}
                     />
                   </div>
                 </div>
