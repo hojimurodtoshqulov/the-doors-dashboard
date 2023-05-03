@@ -75,16 +75,16 @@ export default function ProductsEdit() {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-cases/5`);
+    const res = await axios.get(`${baseUrl}/show-case/5`);
 
     const productData = res.data;
     setData(productData);
-    const base64Images = productData.attachmentContents;
+    const imageIDs = productData.attachmentContentIds;
 
     let images = [];
 
-    base64Images.map(({ data }) => {
-      const img = `data:image/jpg;base64,${data}`;
+    imageIDs.map((item) => {
+      const img = `https://the-doors.herokuapp.com/api/files/${item}`;
       images.push(img);
     });
 
@@ -108,8 +108,7 @@ export default function ProductsEdit() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted)
-      return data.attachmentContents.map((item) => item.id);
+    if (!upload.editStarted) return data.attachmentContentIds;
     try {
       const formData = new FormData();
 
@@ -161,8 +160,7 @@ export default function ProductsEdit() {
 
       console.log(dataToSubmit);
 
-
-      const res = await jwtApi.post("/show-cases", dataToSubmit);
+      const res = await jwtApi.post("/show-case", dataToSubmit);
 
       console.log(res);
 
@@ -192,7 +190,9 @@ export default function ProductsEdit() {
           <div className="bg-secondary rounded h-100 p-4">
             <h6 className="mb-4">Edit showcase information</h6>
             <form
-              className={`${!upload.editStarted && "hideCloseBtns-works-showcase"}`}
+              className={`${
+                !upload.editStarted && "hideCloseBtns-works-showcase"
+              }`}
               onSubmit={handleSubmit}
             >
               <div className="row">

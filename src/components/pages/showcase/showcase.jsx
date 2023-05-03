@@ -75,16 +75,17 @@ export default function ProductsEdit() {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-cases/1`);
+    const res = await axios.get(`${baseUrl}/show-case/1`);
 
     const productData = res.data;
+    console.log(productData);
     setData(productData);
-    const base64Images = productData.attachmentContents;
+    const imageIDs = productData.attachmentContentIds;
 
     let images = [];
 
-    base64Images.map(({ data }) => {
-      const img = `data:image/jpg;base64,${data}`;
+    imageIDs.map((item) => {
+      const img = `https://the-doors.herokuapp.com/api/files/${item}`;
       images.push(img);
     });
 
@@ -108,8 +109,10 @@ export default function ProductsEdit() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted)
-      return data.attachmentContents.map((item) => item.id);
+    if (!upload.editStarted) {
+      console.log(data);
+      return data.attachmentContentIds;
+    }
     try {
       const formData = new FormData();
 
@@ -160,7 +163,7 @@ export default function ProductsEdit() {
 
       console.log(data);
 
-      const res = await jwtApi.post("/show-cases", dataToSubmit);
+      const res = await jwtApi.post("/show-case", dataToSubmit);
 
       console.log(res);
 

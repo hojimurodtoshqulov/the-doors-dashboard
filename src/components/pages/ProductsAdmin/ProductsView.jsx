@@ -78,15 +78,15 @@ export default function ProductsEdit() {
     setPageLoad(true);
     console.log("hello");
     const res = await axios.get(`${baseUrl}/products/${id}`);
-
+    console.log(res);
     const productData = res.data;
     setData(productData);
-    const base64Images = productData.attachmentContents;
+    const imageIDs = productData.attachmentContentIds;
 
     let images = [];
 
-    base64Images.map(({ data }) => {
-      const img = `data:image/jpg;base64,${data}`;
+    imageIDs.map((item) => {
+      const img = `https://the-doors.herokuapp.com/api/files/${item}`;
       images.push(img);
     });
 
@@ -110,8 +110,10 @@ export default function ProductsEdit() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted)
-      return data.attachmentContents.map((item) => item.id);
+    if (!upload.editStarted) {
+      console.log(data);
+      return data.attachmentContentIds;
+    }
     try {
       const formData = new FormData();
 

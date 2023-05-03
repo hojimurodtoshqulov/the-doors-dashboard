@@ -103,7 +103,9 @@ export default function MenuView() {
               Order by <span className="text-info">John Doe</span>
             </h6>
             <div className={`${styles.productContainer} row`}>
-              <ProductImages productData={data.product.attachmentContents} />
+              <ProductImages
+                productData={data.productProjection.attachmentContentIds}
+              />
               <div className="col ">
                 <table class="table bg-transparent">
                   <thead>
@@ -143,11 +145,11 @@ export default function MenuView() {
                       <th class="fit-content" scope="row">
                         Product name
                       </th>
-                      <td>{data.product[translatedProductName]}</td>
+                      <td>{data.productProjection[translatedProductName]}</td>
                     </tr>
                     <tr>
                       <th scope="row">Price</th>
-                      <td>{numberFormatter.format(data.product.price)}</td>
+                      <td>{numberFormatter.format(data.productProjection.price)}</td>
                     </tr>
                     <tr>
                       <th scope="row">Quantity</th>
@@ -157,7 +159,7 @@ export default function MenuView() {
                       <th scope="row">Total</th>
                       <td>
                         {numberFormatter.format(
-                          data.product.price * data.quantity
+                          data.productProjection.price * data.quantity
                         )}
                       </td>
                     </tr>
@@ -204,7 +206,7 @@ const ProductImages = ({ productData }) => {
                 className="img-cover"
                 width={250}
                 height={350}
-                src={`data:image/png;base64,${item.data}`}
+                src={`https://the-doors.herokuapp.com/api/files/${item}`}
                 alt=""
               />
             </div>

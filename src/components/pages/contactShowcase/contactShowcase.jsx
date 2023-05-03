@@ -56,35 +56,20 @@ export default function ContactShowcase() {
     );
   };
 
-  // function createFileFromBase64(base64String) {
-  //   // console.log(base64String.slice(base64String.indexOf(",") + 1));
-  //   const binaryString = window.atob(
-  //     base64String.slice(base64String.indexOf(",") + 1)
-  //   );
-  //   const bytes = new Uint8Array(binaryString.length);
-  //   for (let i = 0; i < binaryString.length; i++) {
-  //     bytes[i] = binaryString.charCodeAt(i);
-  //   }
-  //   const file = new File([bytes.buffer], crypto.randomUUID(), {
-  //     type: "image/jpeg",
-  //   }); // change the type based on the file type
-  //   return file;
-  // }
-
   const getProduct = async () => {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-cases/6`);
+    const res = await axios.get(`${baseUrl}/show-case/6`);
 
     const productData = res.data;
     setData(productData);
-    const base64Images = productData.attachmentContents;
+    const imageIDs = productData.attachmentContentIds;
 
     let images = [];
 
-    base64Images.map(({ data }) => {
-      const img = `data:image/jpg;base64,${data}`;
+    imageIDs.map((item) => {
+      const img = `https://the-doors.herokuapp.com/api/files/${item}`;
       images.push(img);
     });
 
@@ -108,8 +93,7 @@ export default function ContactShowcase() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted)
-      return data.attachmentContents.map((item) => item.id);
+    if (!upload.editStarted) return data.attachmentContentIds;
     try {
       const formData = new FormData();
 
@@ -161,7 +145,7 @@ export default function ContactShowcase() {
 
       console.log(dataToSubmit);
 
-      const res = await jwtApi.post("/show-cases", dataToSubmit);
+      const res = await jwtApi.post("/show-case", dataToSubmit);
 
       console.log(res);
 

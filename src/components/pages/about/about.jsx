@@ -77,12 +77,12 @@ export default function ProductsEdit() {
 
     const productData = res.data;
     setData(productData);
-    const base64Images = productData.attachmentContents;
+    const imageIDs = productData.attachmentContentIds;
 
     let images = [];
 
-    base64Images.map(({ data }) => {
-      const img = `data:image/jpg;base64,${data}`;
+    imageIDs.map((image) => {
+      const img = `https://the-doors.herokuapp.com/api/files/${image}`;
       images.push(img);
     });
 
@@ -106,8 +106,7 @@ export default function ProductsEdit() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted)
-      return data.attachmentContents.map((item) => item.id);
+    if (!upload.editStarted) return data.attachmentContentIds;
     try {
       const formData = new FormData();
 
