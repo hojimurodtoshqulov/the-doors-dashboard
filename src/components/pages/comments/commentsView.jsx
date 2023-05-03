@@ -12,16 +12,17 @@ import Spinner from "../../spinner";
 
 import "./style.scss";
 
-export default function ContactShowcase() {
+export default function CommentsView() {
   const { id } = useParams();
   const { jwtApi } = useJwtApi();
 
   const [data, setData] = useState({
-    titleRu: "",
-    titleUz: "",
-    descriptionRu: "",
-    descriptionUz: "",
-    attachmentContentsId: [],
+    fullName: "",
+    commentUz: "",
+    commentRu: "",
+    job: "",
+    attachmentContentId: null,
+    id: null,
   });
 
   const [upload, setUpload] = useState({
@@ -31,6 +32,8 @@ export default function ContactShowcase() {
     defaultImages: [],
     editStarted: false,
   });
+
+  const navigator = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [pageLoad, setPageLoad] = useState(false);
@@ -56,22 +59,34 @@ export default function ContactShowcase() {
     );
   };
 
-  const getProduct = async () => {
+  // function createFileFromBase64(base64String) {
+  //   // console.log(base64String.slice(base64String.indexOf(",") + 1));
+  //   const binaryString = window.atob(
+  //     base64String.slice(base64String.indexOf(",") + 1)
+  //   );
+  //   const bytes = new Uint8Array(binaryString.length);
+  //   for (let i = 0; i < binaryString.length; i++) {
+  //     bytes[i] = binaryString.charCodeAt(i);
+  //   }
+  //   const file = new File([bytes.buffer], crypto.randomUUID(), {
+  //     type: "image/jpeg",
+  //   }); // change the type based on the file type
+  //   return file;
+  // }
+
+  const getComment = async () => {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-case/52`);
+    const res = await axios.get(`${baseUrl}/comments/${id}`);
 
     const productData = res.data;
+    console.log(productData);
     setData(productData);
-    const imageIDs = productData.attachmentContentIds;
 
-    let images = [];
-
-    imageIDs.map((item) => {
-      const img = `https://the-doors.herokuapp.com/api/files/${item}`;
-      images.push(img);
-    });
+    let images = [
+      `https://the-doors.herokuapp.com/api/files/${productData.contentId}`,
+    ];
 
     setUpload(
       (prevUpload) => ({
@@ -88,22 +103,24 @@ export default function ContactShowcase() {
   };
 
   useEffect(() => {
-    getProduct();
+    getComment();
     setLoading(false);
   }, []);
 
+  console.log(data);
   const sumbitImages = async () => {
-    if (!upload.editStarted) return data.attachmentContentIds;
+    if (!upload.editStarted) {
+      return data.contentId;
+    }
     try {
       const formData = new FormData();
 
       const { pictures, defaultImages } = upload;
 
       const allPics = [...pictures];
-      console.log(pictures);
+      console.log(allPics);
 
-      if (allPics.length !== 1) throw new Error("Upload 1 images");
-
+      if (allPics.length !== 1) throw new Error("Upload 1 image");
       allPics.forEach((file) => {
         formData.append("file", file);
       });
@@ -117,8 +134,7 @@ export default function ContactShowcase() {
 
       return res.data;
     } catch (error) {
-      NotificationManager.error(error.message, "Image error");
-      console.log(error);
+      throw error;
     }
   };
 
@@ -131,21 +147,24 @@ export default function ContactShowcase() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     try {
       setLoading(true);
-      const attachmentContentIds = await sumbitImages();
+
+      const [attachmentContentId] = await sumbitImages();
+      console.log(attachmentContentId);
       const dataToSubmit = {
-        id: 52,
-        titleUz: data.titleUz,
-        titleRu: data.titleUz,
-        descriptionUz: data.descriptionUz,
-        descriptionRu: data.descriptionRu,
-        attachmentContentIds,
+        fullName: data.fullName,
+        commentUz: data.commentUz,
+        commentRu: data.commentRu,
+        job: data.job,
+        attachmentContentId,
+        id: data.id,
       };
 
       console.log(dataToSubmit);
 
-      const res = await jwtApi.post("/show-case", dataToSubmit);
+      const res = await jwtApi.post("/comments", dataToSubmit);
 
       console.log(res);
 
@@ -157,8 +176,9 @@ export default function ContactShowcase() {
         defaultImages: [],
         editStarted: false,
       });
-      NotificationManager.success("Showcase edited", "Success");
-      getProduct();
+      setData({});
+      NotificationManager.success("Comment edited", "Success");
+      navigator("/comments", { replace: true });
     } catch (error) {
       setLoading(false);
       NotificationManager.error(error.message, "Form validation");
@@ -173,23 +193,21 @@ export default function ContactShowcase() {
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Edit Cantact showcase information</h6>
+            <h6 className="mb-4">Edit the comment</h6>
             <form
-              className={`${
-                !upload.editStarted && "hideCloseBtns-works-showcase"
-              }`}
+              className={`${!upload.editStarted && "hideCloseBtns"}`}
               onSubmit={handleSubmit}
             >
               <div className="row">
-                <div className="col-12">
+                <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Phone number
+                      Fullname
                     </label>
                     <input
-                      type="number"
-                      name="titleUz"
-                      value={data.titleUz}
+                      type="text"
+                      name="fullName"
+                      value={data.fullName}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
@@ -200,12 +218,28 @@ export default function ContactShowcase() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Description : ru
+                      Job
+                    </label>
+                    <input
+                      type="text"
+                      name="job"
+                      value={data.job}
+                      onChange={handleChange}
+                      className="form-control"
+                      id="exampleInputEmail1"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Comment : ru
                     </label>
                     <textarea
-                      name="descriptionRu"
+                      name="commentRu"
                       // lang={item.key}
-                      value={data.descriptionRu}
+                      value={data.commentRu}
                       onChange={handleChange}
                       className="form-control"
                       id="short_content_ru"
@@ -216,12 +250,12 @@ export default function ContactShowcase() {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Description : uz
+                      Comment : uz
                     </label>
                     <textarea
-                      name="descriptionUz"
+                      name="commentUz"
                       // lang={item.key}
-                      value={data.descriptionUz}
+                      value={data.commentUz}
                       onChange={handleChange}
                       className="form-control"
                       id="short_content_ru"

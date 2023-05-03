@@ -49,6 +49,9 @@ import About from "./components/pages/about/about";
 import VideoSubmit from "./components/pages/video/video";
 import WorkShowcase from "./components/pages/work-showcase/workShowcase";
 import ContactShowcase from "./components/pages/contactShowcase/contactShowcase";
+import Comments from "./components/pages/comments/comments";
+import CommentsCreate from "./components/pages/comments/commentsCreate";
+import CommentsView from "./components/pages/comments/commentsView";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -96,6 +99,10 @@ function App() {
 
           <Route path="about" element={<About />} />
           <Route path="video" element={<VideoSubmit />} />
+
+          <Route path="comments" element={<Comments />} />
+          <Route path="comments/create" element={<CommentsCreate />} />
+          <Route path="comments/view/:id" element={<CommentsView />} />
 
           {/* 
           <Route path="setting" element={<LangSetting />} />
