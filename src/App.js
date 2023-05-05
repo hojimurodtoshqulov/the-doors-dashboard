@@ -52,6 +52,7 @@ import ContactShowcase from "./components/pages/contactShowcase/contactShowcase"
 import Comments from "./components/pages/comments/comments";
 import CommentsCreate from "./components/pages/comments/commentsCreate";
 import CommentsView from "./components/pages/comments/commentsView";
+import Advantages from "./components/pages/advantages/advantages";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -103,6 +104,8 @@ function App() {
           <Route path="comments" element={<Comments />} />
           <Route path="comments/create" element={<CommentsCreate />} />
           <Route path="comments/view/:id" element={<CommentsView />} />
+
+          <Route path="advantages" element={<Advantages />} />
 
           {/* 
           <Route path="setting" element={<LangSetting />} />
