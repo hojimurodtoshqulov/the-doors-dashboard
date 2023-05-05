@@ -12,19 +12,16 @@ import Spinner from "../../spinner";
 
 import "./style.scss";
 
-export default function ContactShowcase() {
+export default function ProductsEdit() {
   const { id } = useParams();
   const { jwtApi } = useJwtApi();
 
   const [data, setData] = useState({
     titleRu: "",
     titleUz: "",
-    telNum1: "",
-    telNum2: "",
-    telNum3: "",
     descriptionRu: "",
     descriptionUz: "",
-    attachmentContentsId: [],
+    attachmentContentsId: "",
   });
 
   const [upload, setUpload] = useState({
@@ -59,28 +56,35 @@ export default function ContactShowcase() {
     );
   };
 
+  // function createFileFromBase64(base64String) {
+  //   // console.log(base64String.slice(base64String.indexOf(",") + 1));
+  //   const binaryString = window.atob(
+  //     base64String.slice(base64String.indexOf(",") + 1)
+  //   );
+  //   const bytes = new Uint8Array(binaryString.length);
+  //   for (let i = 0; i < binaryString.length; i++) {
+  //     bytes[i] = binaryString.charCodeAt(i);
+  //   }
+  //   const file = new File([bytes.buffer], crypto.randomUUID(), {
+  //     type: "image/jpeg",
+  //   }); // change the type based on the file type
+  //   return file;
+  // }
+
   const getProduct = async () => {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-case/52`);
+    const res = await axios.get(`${baseUrl}/about-us-showcase`);
 
     const productData = res.data;
-    const telNumbers = productData.titleUz.split("*");
     setData({
       ...productData,
-      telNum1: telNumbers[0],
-      telNum2: telNumbers[1],
-      telNum3: telNumbers[2],
+      attachmentContentsId: productData.attachmentContentId,
     });
-    const imageIDs = productData.attachmentContentIds;
+    const imageIDs = productData.attachmentContentId;
 
-    let images = [];
-
-    imageIDs.map((item) => {
-      const img = `https://the-doors.herokuapp.com/api/files/${item}`;
-      images.push(img);
-    });
+    let images = [`https://the-doors.herokuapp.com/api/files/${imageIDs}`];
 
     setUpload(
       (prevUpload) => ({
@@ -102,7 +106,7 @@ export default function ContactShowcase() {
   }, []);
 
   const sumbitImages = async () => {
-    if (!upload.editStarted) return data.attachmentContentIds;
+    if (!upload.editStarted) return [data.attachmentContentsId];
     try {
       const formData = new FormData();
 
@@ -140,23 +144,24 @@ export default function ContactShowcase() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const [attachmentContentIds] = await sumbitImages();
+    const dataToSubmit = {
+      id: 1,
+      titleUz: data.titleUz,
+      titleRu: data.titleRu,
+      descriptionUz: data.descriptionUz,
+      descriptionRu: data.descriptionRu,
+      attachmentContentId: attachmentContentIds,
+    };
+
+    console.log(JSON.stringify(dataToSubmit));
 
     try {
       setLoading(true);
-      const attachmentContentIds = await sumbitImages();
-      const telNumbers = `${data.telNum1}*${data.telNum2}*${data.telNum3}`;
-      const dataToSubmit = {
-        id: 52,
-        titleUz: telNumbers,
-        titleRu: telNumbers,
-        descriptionUz: data.descriptionUz,
-        descriptionRu: data.descriptionRu,
-        attachmentContentIds,
-      };
 
       console.log(dataToSubmit);
 
-      const res = await jwtApi.post("/show-case", dataToSubmit);
+      const res = await jwtApi.post("/about-us-showcase", dataToSubmit);
 
       console.log(res);
 
@@ -184,7 +189,7 @@ export default function ContactShowcase() {
       <div className="row vh-100  rounded  justify-content-center mx-0">
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
-            <h6 className="mb-4">Edit Cantact showcase information</h6>
+            <h6 className="mb-4">Edit showcase information</h6>
             <form
               className={`${
                 !upload.editStarted && "hideCloseBtns-works-showcase"
@@ -192,43 +197,31 @@ export default function ContactShowcase() {
               onSubmit={handleSubmit}
             >
               <div className="row">
-                <div className="col-12">
+                <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Phone number 1
+                      Title : ru
                     </label>
                     <input
-                      type="number"
-                      name="telNum1"
-                      value={data.telNum1}
+                      type="text"
+                      name="titleRu"
+                      value={data.titleRu}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"
                       required
                     />
                   </div>
+                </div>
+                <div className="col-md-6">
                   <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
-                      Phone number 2
+                      Title : uz
                     </label>
                     <input
-                      type="number"
-                      name="telNum2"
-                      value={data.telNum2}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="exampleInputEmail1"
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                      Phone number 3
-                    </label>
-                    <input
-                      type="number"
-                      name="telNum3"
-                      value={data.telNum3}
+                      type="text"
+                      name="titleUz"
+                      value={data.titleUz}
                       onChange={handleChange}
                       className="form-control"
                       id="exampleInputEmail1"

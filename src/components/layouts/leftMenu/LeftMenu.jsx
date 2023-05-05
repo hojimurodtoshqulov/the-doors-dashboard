@@ -43,21 +43,28 @@ function LeftMenu() {
             <i className="fa fa-solid fa-bars me-2"></i>Order
           </NavLink>
           <NavLink to="/showcase" className={`${s.nav_link} nav-item nav-link`}>
-            <i className="fa fa-solid fa-bars me-2"></i>Main showcase
+            <i className="fa fa-solid fa-bars me-2"></i>Main showc...
           </NavLink>
           <NavLink
             title="Porjects showcase"
             to="/work-showcase"
             className={`${s.nav_link} nav-item nav-link`}
           >
-            <i className="fa fa-solid fa-bars me-2"></i>ProjectsShow...
+            <i className="fa fa-solid fa-bars me-2"></i>ProjectsSho...
           </NavLink>
           <NavLink
             title="Contact showcase"
             to="/contact-showcase"
             className={`${s.nav_link} nav-item nav-link`}
           >
-            <i className="fa fa-solid fa-bars me-2"></i>ContactShow...
+            <i className="fa fa-solid fa-bars me-2"></i>ContactSho...
+          </NavLink>
+          <NavLink
+            title="Contact showcase"
+            to="/about-showcase"
+            className={`${s.nav_link} nav-item nav-link`}
+          >
+            <i className="fa fa-solid fa-bars me-2"></i>AboutShow...
           </NavLink>
           <NavLink to="/work" className={`${s.nav_link} nav-item nav-link`}>
             <i className="fa fa-solid fa-bars me-2"></i>Work
