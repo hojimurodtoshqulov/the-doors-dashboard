@@ -11,6 +11,7 @@ import { useJwtApi } from "../../../api/jwtApi";
 import Spinner from "../../spinner";
 
 import "./style.scss";
+import ReactQuill from "react-quill";
 
 export default function ContactShowcase() {
   const { id } = useParams();
@@ -241,14 +242,15 @@ export default function ContactShowcase() {
                     <label htmlFor="exampleInputEmail1" className="form-label">
                       Description : ru
                     </label>
-                    <textarea
-                      name="descriptionRu"
-                      // lang={item.key}
+                    <ReactQuill
+                      theme={"snow"}
                       value={data.descriptionRu}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="short_content_ru"
-                      rows={6}
+                      onChange={(val) => {
+                        const event = {
+                          target: { value: val, name: "descriptionRu" },
+                        };
+                        handleChange(event);
+                      }}
                     />
                   </div>
                 </div>
@@ -257,14 +259,15 @@ export default function ContactShowcase() {
                     <label htmlFor="exampleInputEmail1" className="form-label">
                       Description : uz
                     </label>
-                    <textarea
-                      name="descriptionUz"
-                      // lang={item.key}
+                    <ReactQuill
+                      theme={"snow"}
                       value={data.descriptionUz}
-                      onChange={handleChange}
-                      className="form-control"
-                      id="short_content_ru"
-                      rows={6}
+                      onChange={(val) => {
+                        const event = {
+                          target: { value: val, name: "descriptionUz" },
+                        };
+                        handleChange(event);
+                      }}
                     />
                   </div>
                 </div>
