@@ -30,15 +30,17 @@ export default function ProductsEdit() {
 
   const [loading, setLoading] = useState(false);
   const [pageLoad, setPageLoad] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const handleImageChange = (files, base64) => {
-    console.log(base64);
+    console.log(files);
     if (!upload.editStarted) {
       setUpload((prev) => {
         return {
           ...prev,
           defaultImages: [...base64.slice(8)],
           editStarted: true,
+          pictures: [],
         };
       });
     }
@@ -127,12 +129,7 @@ export default function ProductsEdit() {
     }
   };
 
-  const handleChange = (event) => {
-    const inputName = event.target.name;
-    const inputValue = event.target.value;
-
-    setData((oldValue) => ({ ...oldValue, [inputName]: inputValue }));
-  };
+  console.log(upload);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -141,7 +138,7 @@ export default function ProductsEdit() {
 
     try {
       setLoading(true);
-      const attachmentContentIds = await sumbitImages();
+      await sumbitImages();
 
       setLoading(false);
       setUpload({
@@ -151,6 +148,7 @@ export default function ProductsEdit() {
         defaultImages: [],
         editStarted: false,
       });
+      setToggle((prev) => !prev);
       NotificationManager.success("Showcase edited", "Success");
       getImages();
     } catch (error) {
@@ -176,6 +174,7 @@ export default function ProductsEdit() {
                 <div className="col-12 pb-3 mb-3 border-bottom">
                   <div class="mb-3">
                     <ImageUploadPreviewComponent
+                      key={toggle}
                       btnType="edit"
                       {...upload}
                       handleChange={handleImageChange}

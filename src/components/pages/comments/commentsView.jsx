@@ -54,7 +54,6 @@ export default function CommentsView() {
     console.log(productData);
     setData(productData);
 
-    console.log(productData);
     setPageLoad(false);
   };
 
