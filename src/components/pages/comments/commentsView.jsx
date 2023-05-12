@@ -21,43 +21,13 @@ export default function CommentsView() {
     commentUz: "",
     commentRu: "",
     job: "",
-    attachmentContentId: null,
     id: null,
-  });
-
-  const [upload, setUpload] = useState({
-    pictures: [],
-    maxFileSize: 5242880,
-    imgExtension: [".jpg", ".png"],
-    defaultImages: [],
-    editStarted: false,
   });
 
   const navigator = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [pageLoad, setPageLoad] = useState(false);
-
-  const handleImageChange = (files, base64) => {
-    console.log(base64);
-    if (!upload.editStarted) {
-      setUpload((prev) => {
-        return {
-          ...prev,
-          defaultImages: [...base64.slice(1)],
-          editStarted: true,
-        };
-      });
-    }
-    setUpload(
-      (prevUpload) => {
-        return { ...prevUpload, pictures: [...files] };
-      },
-      () => {
-        console.warn(files);
-      }
-    );
-  };
 
   // function createFileFromBase64(base64String) {
   //   // console.log(base64String.slice(base64String.indexOf(",") + 1));
@@ -84,20 +54,6 @@ export default function CommentsView() {
     console.log(productData);
     setData(productData);
 
-    let images = [
-      `https://the-doors.herokuapp.com/api/files/${productData.contentId}`,
-    ];
-
-    setUpload(
-      (prevUpload) => ({
-        ...prevUpload,
-        defaultImages: images,
-      }),
-      () => {
-        console.warn("It was added!");
-      }
-    );
-
     console.log(productData);
     setPageLoad(false);
   };
@@ -108,35 +64,6 @@ export default function CommentsView() {
   }, []);
 
   console.log(data);
-  const sumbitImages = async () => {
-    if (!upload.editStarted) {
-      return data.contentId;
-    }
-    try {
-      const formData = new FormData();
-
-      const { pictures, defaultImages } = upload;
-
-      const allPics = [...pictures];
-      console.log(allPics);
-
-      if (allPics.length !== 1) throw new Error("Upload 1 image");
-      allPics.forEach((file) => {
-        formData.append("file", file);
-      });
-
-      const res = await axios.post(`${baseUrl}/files`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-      });
-
-      return res.data;
-    } catch (error) {
-      throw error;
-    }
-  };
 
   const handleChange = (event) => {
     const inputName = event.target.name;
@@ -150,15 +77,11 @@ export default function CommentsView() {
 
     try {
       setLoading(true);
-
-      const [attachmentContentId] = await sumbitImages();
-      console.log(attachmentContentId);
       const dataToSubmit = {
         fullName: data.fullName,
         commentUz: data.commentUz,
         commentRu: data.commentRu,
         job: data.job,
-        attachmentContentId,
         id: data.id,
       };
 
@@ -169,13 +92,6 @@ export default function CommentsView() {
       console.log(res);
 
       setLoading(false);
-      setUpload({
-        pictures: [],
-        maxFileSize: 5242880,
-        imgExtension: [".jpg", ".png"],
-        defaultImages: [],
-        editStarted: false,
-      });
       setData({});
       NotificationManager.success("Comment edited", "Success");
       navigator("/comments", { replace: true });
@@ -194,10 +110,7 @@ export default function CommentsView() {
         <div className="col-12">
           <div className="bg-secondary rounded h-100 p-4">
             <h6 className="mb-4">Edit the comment</h6>
-            <form
-              className={`${!upload.editStarted && "hideCloseBtns"}`}
-              onSubmit={handleSubmit}
-            >
+            <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-md-6">
                   <div className="mb-3">
@@ -260,15 +173,6 @@ export default function CommentsView() {
                       className="form-control"
                       id="short_content_ru"
                       rows={6}
-                    />
-                  </div>
-                </div>
-                <div className="col-12 pb-3 mb-3 border-bottom">
-                  <div class="mb-3">
-                    <ImageUploadPreviewComponent
-                      btnType="edit"
-                      {...upload}
-                      handleChange={handleImageChange}
                     />
                   </div>
                 </div>

@@ -57,6 +57,7 @@ import AboutShowcase from "./components/pages/aboutShowcase/aboutShowcase";
 import Partners from "./components/pages/partners/partners";
 import PartnersCreate from "./components/pages/partners/partnersCreate";
 import PartnersView from "./components/pages/partners/partnersView";
+import Projects from "./components/pages/projects/projects";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -115,6 +116,7 @@ function App() {
           <Route path="partners" element={<Partners />} />
           <Route path="partners/create" element={<PartnersCreate />} />
           <Route path="partners/view/:id" element={<PartnersView />} />
+          <Route path="projects" element={<Projects />} />
 
           {/* 
           <Route path="setting" element={<LangSetting />} />
