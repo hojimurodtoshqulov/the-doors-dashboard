@@ -75,7 +75,7 @@ export default function ProductsEdit() {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-case/53`);
+    const res = await axios.get(`${baseUrl}/show-case/2`);
 
     const productData = res.data;
     setData(productData);
@@ -150,7 +150,7 @@ export default function ProductsEdit() {
       setLoading(true);
       const attachmentContentIds = await sumbitImages();
       const dataToSubmit = {
-        id: 53,
+        id: 2,
         titleUz: data.titleUz,
         titleRu: data.titleRu,
         descriptionUz: data.descriptionUz,

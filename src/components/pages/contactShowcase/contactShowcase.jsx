@@ -64,7 +64,7 @@ export default function ContactShowcase() {
     console.log(baseUrl);
     setPageLoad(true);
     console.log("hello");
-    const res = await axios.get(`${baseUrl}/show-case/52`);
+    const res = await axios.get(`${baseUrl}/show-case/3`);
 
     const productData = res.data;
     const telNumbers = productData.titleUz.split("*");
@@ -147,7 +147,7 @@ export default function ContactShowcase() {
       const attachmentContentIds = await sumbitImages();
       const telNumbers = `${data.telNum1}*${data.telNum2}*${data.telNum3}`;
       const dataToSubmit = {
-        id: 52,
+        id: 3,
         titleUz: telNumbers,
         titleRu: telNumbers,
         descriptionUz: data.descriptionUz,

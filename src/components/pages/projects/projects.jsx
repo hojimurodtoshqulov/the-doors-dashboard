@@ -17,7 +17,7 @@ export default function ProductsEdit() {
   const { jwtApi } = useJwtApi();
 
   const [data, setData] = useState({
-    attachmentContentIds: [1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217],
+    attachmentContentIds: [36, 37, 38, 39, 40, 41, 42, 43],
   });
 
   const [upload, setUpload] = useState({

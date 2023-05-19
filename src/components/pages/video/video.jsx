@@ -48,7 +48,7 @@ export default function VideoSubmit() {
   const getVideo = async () => {
     try {
       setPageLoad(true);
-      setVideoUrl(`https://the-doors.herokuapp.com/api/files/470`);
+      setVideoUrl(`https://the-doors.herokuapp.com/api/files/35`);
       setVideoFile(null);
     } catch (error) {
     } finally {
@@ -62,7 +62,7 @@ export default function VideoSubmit() {
       if (!videoFile) throw new Error("Insert video");
       const formData = new FormData();
       formData.append("file", videoFile);
-      const res = await axios.post(`${baseUrl}/files/470`, formData, {
+      const res = await axios.post(`${baseUrl}/files/35`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -105,7 +105,7 @@ export default function VideoSubmit() {
         reject(e);
       };
 
-      xhr.open("POST", `${baseUrl}/files/470`);
+      xhr.open("POST", `${baseUrl}/files/35`);
 
       // Set authorization header
       xhr.setRequestHeader(
