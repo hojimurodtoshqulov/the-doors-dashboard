@@ -18,12 +18,7 @@ function Pages() {
     console.log(sessionToken);
     if (sessionToken) {
       const tokenData = jwt(sessionToken);
-      console.log(tokenData.role !== "admin");
-      if (tokenData.sub !== "admin") {
-        navigate("/login", { replace: true });
-      } else {
-        setToken(tokenData);
-      }
+      setToken(tokenData);
     } else {
       navigate("/login", { replace: true });
     }

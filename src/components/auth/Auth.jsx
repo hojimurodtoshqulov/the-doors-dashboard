@@ -20,36 +20,32 @@ export default function Auth() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    navigate("/", { replace: true });
+    // navigate("/", { replace: true });
 
     axios
       .post(`${baseUrl}/auth`, data)
       .then((res) => {
         if (res.status === 200) {
           const token = res.data.message;
-          const tokenData = jwt(token);
-          if (tokenData.sub === "admin") {
-            sessionStorage.setItem("token", token);
-            setToken(token);
-
-            navigate("/", { replace: true });
-          } else {
-            alert("Admin user not found");
-          }
+          sessionStorage.setItem("token", token);
+          setToken(token);
+          navigate("/", { replace: true });
+        } else {
+          alert("Admin user not found");
         }
       })
       .catch((err) => {
-        alert("User not found");
+        alert("Username or password is incorrect");
       });
   };
   useEffect(() => {
-    const sessionToken = sessionStorage.getItem("token");
-    if (sessionToken) {
-      const tokenData = jwt(sessionToken);
-      if (tokenData.role == "admin") {
-        navigate("/admin", { replace: true });
-      }
-    }
+    // const sessionToken = sessionStorage.getItem("token");
+    // if (sessionToken) {
+    //   const tokenData = jwt(sessionToken);
+    //   if (tokenData.role === "admin" || tokenData.role === "admin") {
+    //     navigate("/", { replace: true });
+    //   }
+    // }
   }, []);
 
   const handleChange = (event) => {
@@ -59,9 +55,7 @@ export default function Auth() {
   };
   return (
     <div className="scontainer-fluid overflow-hidden">
-      <div
-        className="row vh-100 hidden align-items-center justify-content-center"
-      >
+      <div className="row vh-100 hidden align-items-center justify-content-center">
         <div className="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
           <div className="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
             <div className="d-flex align-items-center justify-content-between mb-3">
